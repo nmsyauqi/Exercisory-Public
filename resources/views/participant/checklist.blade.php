@@ -1,0 +1,3 @@
+halo peserta
+
+@yield('checklist')
