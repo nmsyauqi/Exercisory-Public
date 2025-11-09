@@ -7,30 +7,28 @@ use Illuminate\Support\Facades\Auth;
 
 class NotificationBell extends Component
 {
-    // Properti ini akan di-refresh otomatis oleh Livewire
     public $unreadNotifications;
     public $showDropdown = false;
 
-    // 'mount' berjalan saat komponen pertama kali dimuat
     public function mount()
     {
         $this->loadNotifications();
     }
 
-    // Mengambil notifikasi yang belum dibaca
+    // unread notifications
     public function loadNotifications()
     {
-        // Trait Notifiable memberi kita method unreadNotifications()
+        // method unreadNotifications()
         $this->unreadNotifications = Auth::user()->unreadNotifications;
     }
 
-    // Membuka atau menutup dropdown
+    // dropdown toggle
     public function toggleDropdown()
     {
         $this->showDropdown = !$this->showDropdown;
     }
 
-    // Menandai notifikasi sebagai sudah dibaca
+    // mark as read
     public function markAsRead($notificationId)
     {
         $notification = Auth::user()->notifications()->find($notificationId);
@@ -39,17 +37,23 @@ class NotificationBell extends Component
             $notification->markAsRead();
         }
 
-        // Ambil URL dari data notifikasi
+        // url data notifikasi
         $url = $notification->data['url'] ?? '#';
 
-        // Refresh daftar notifikasi setelah dibaca
+        // refresh daftar notifikasi
         $this->loadNotifications();
 
-        // Arahkan pengguna ke URL notifikasi
+        // url notifikasi
         return redirect($url);
     }
+    // mark all as read
+    public function markAllAsRead()
+    {
+        Auth::user()->unreadNotifications->markAsRead();
+        $this->loadNotifications();
+    }
 
-    // Merender tampilan
+    // render
     public function render()
     {
         return view('livewire.notification-bell');

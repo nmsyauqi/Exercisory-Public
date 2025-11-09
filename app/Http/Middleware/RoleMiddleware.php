@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
-class RoleMiddleware // <-- Ini nama kelas yang benar
+class RoleMiddleware 
 {
     /**
      * Handle an incoming request.
@@ -16,23 +16,23 @@ class RoleMiddleware // <-- Ini nama kelas yang benar
      */
     public function handle(Request $request, Closure $next, ...$roles): Response
     {
-        // Jika belum login, lempar ke login
+        // redirect ke login jika belum
         if (!Auth::check()) {
             return redirect('login');
         }
 
         $user = Auth::user();
 
-        // Cek semua role yang diizinkan untuk rute ini
+        // cek role
         foreach ($roles as $role) {
-            // Kita pakai strtolower untuk memastikan (admin == admin)
+            // pastikan admin == admin
             if (strtolower($user->role) == $role) {
-                // Jika cocok, izinkan request
+                // sesuai maka lanjutkan request
                 return $next($request);
             }
         }
 
-        // Jika tidak ada role yang cocok, lempar ke halaman utama
+        // tidak sesuai redirect ke home
         return redirect('/');
     }
 }

@@ -13,11 +13,10 @@ class DashboardController extends Controller
      */
     public function index(Request $request)
     {
-        // Tes debug kita masih ada di sini
         $user = Auth::user();
         
 
-        // Kode di bawah ini belum akan berjalan sampai dd() dihapus
+        // redirect berdasarkan role user
         $role = $user->role ? strtolower($user->role) : ''; 
 
         if ($role === 'admin') {

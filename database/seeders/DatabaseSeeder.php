@@ -13,7 +13,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        User::factory()->create([
+            'name' => 'zero',
+            'email' => '0@0.0',
+            'password' => ('fufufafa'),
+            'role' => 'admin',
+        ]);
 
         $this->call([
             // Panggil seeder Anda di sini
@@ -21,9 +26,6 @@ class DatabaseSeeder extends Seeder
             TugasSeeder::class,
         ]);
         
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        
     }
 }

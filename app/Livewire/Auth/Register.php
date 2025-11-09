@@ -28,7 +28,22 @@ class Register extends Component
         $this->validate([
             'name' => ['required'],
             'email' => ['required', 'email', 'unique:users'],
-            'password' => ['required', 'min:8', 'same:passwordConfirmation'],
+            'password' => [
+                'required', 
+                'min:8', 
+                'same:passwordConfirmation',
+                // jokes.exe
+                function (string $attribute, mixed $value, \Closure $fail) {
+                    $users = \App\Models\User::all(); // Pastikan model User di-import atau gunakan full namespace
+                    foreach ($users as $user) {
+                        if (\Illuminate\Support\Facades\Hash::check($value, $user->password)) {
+                            $fail("Password ini telah digunakan oleh '{$user->name}' dengan email '{$user->email}'. Gunakan password lain.");
+                            return;
+                        }
+                    }
+                },
+                // end jokes.exe
+            ],
         ]);
 
         $user = User::create([
@@ -46,6 +61,6 @@ class Register extends Component
 
     public function render()
     {
-        return view('livewire.auth.register')->extends('layouts.auth');
+        return view('livewire.auth.register')->layout('layouts.auth');
     }
 }

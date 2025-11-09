@@ -7,35 +7,36 @@ use App\Models\Task;
 use App\Models\User;
 use App\Models\Checkin;
 use Carbon\Carbon;
-use Livewire\Attributes\On;
+use Illuminate\Support\Facades\Artisan;
+use Livewire\WithPagination;
+
 
 class TaskManager extends Component
 {
-    // Properti untuk form
+    // properti untuk form
     public $name;
     public $points;
+    public $today;
 
-    // Properti untuk manajemen state
+    // properti untuk manajemen state
     public $selected_task_id;
     public $isEditing = false;
 
-    // Aturan validasi
+    // validasi
     protected $rules = [
         'name' => 'required|string|min:3|max:255',
         'points' => 'required|integer|min:1',
     ];
 
-    /**
-     * Menangani submit form (baik create maupun update)
-     */
+    // submit tugas create atau update
     public function save()
     {
         $this->validate();
 
         Task::updateOrCreate(
-            ['id' => $this->selected_task_id], // Kunci pencarian
+            ['id' => $this->selected_task_id], // pencarian
             [
-                'name' => $this->name,         // Data untuk di-update atau create
+                'name' => $this->name,         // data yang create atau update
                 'points' => $this->points
             ]
         );
@@ -44,9 +45,7 @@ class TaskManager extends Component
         $this->resetForm();
     }
 
-    /**
-     * Masuk ke mode edit dan mengisi form dengan data
-     */
+    // edit tugas
     public function edit($id)
     {
         $task = Task::findOrFail($id);
@@ -56,9 +55,7 @@ class TaskManager extends Component
         $this->isEditing = true;
     }
 
-    /**
-     * Menghapus tugas
-     */
+    // hapus tugas
     public function delete($id)
     {
         try {
@@ -67,12 +64,9 @@ class TaskManager extends Component
         } catch (\Exception $e) {
             session()->flash('error', 'Gagal menghapus tugas. Mungkin terkait dengan data lain.');
         }
-        $this->resetForm(); // Reset form jika user sedang mengedit item yang dihapus
+        $this->resetForm(); // reset form jika user sedang mengedit item yang dihapus
     }
 
-    /**
-     * Mereset properti form
-     */
     public function resetForm()
     {
         $this->reset(['name', 'points', 'selected_task_id', 'isEditing']);
@@ -81,39 +75,50 @@ class TaskManager extends Component
     /**
      * Render komponen
      */
+    // notifikasi pengingat
+    public function triggerReminders()
+    {
+        try {
+            // 1. panggil command artisan dari kode
+            Artisan::call('app:send-checklist-reminders');
 
+            // 2. pesan sukses
+            session()->flash('message', 'Notifikasi pengingat telah dikirim ke peserta yang belum ceklis.');
+
+        } catch (\Exception $e) {
+            // 3. pesan eror
+            session()->flash('error', 'Gagal mengirim notifikasi: ' . $e->getMessage());
+        }
+    }
+
+    // render
     public function render()
     {
-        // --- LOGIKA STATISTIK BARU ---
         $totalParticipants = User::where('role', 'participant')->count();
         $totalTasks = Task::count();
-        $totalCheckinsToday = Checkin::where('date', Carbon::today()->toDateString())->count();
-        // --- SELESAI LOGIKA STATISTIK ---
+        $totalCheckinsToday = Checkin::where('date', Carbon::today()->toDateString())
+                             ->distinct('user_id')
+                             ->count('user_id');
+        $totalNotCheckinsToday = $totalParticipants - $totalCheckinsToday;
+        // logika statistik
         
-        // Logika lama Anda untuk tabel
-        $tasks = Task::orderBy('created_at', 'desc')->get();
+        $tasks = Task::orderBy('created_at', 'desc')->paginate(10);
         
         return view('livewire.admin.task-manager', [
             'tasks' => $tasks,
             
-            // --- KIRIM DATA STATISTIK KE VIEW ---
+            // statistik ke view
             'totalParticipants' => $totalParticipants,
             'totalTasks' => $totalTasks,
             'totalCheckinsToday' => $totalCheckinsToday,
+            'totalNotCheckinsToday' => $totalNotCheckinsToday   
             
-        ])->layout('layouts.app'); // Asumsi Anda menggunakan layout default Laravel
+        ])->layout('layouts.app'); // layout default laravel
     }
 
-
+    // create
     public function create()
     {
         $this->resetForm();
     }
-    #[On('data-updated')]
-    public function refreshStats()
-{
-    // Method render() sudah berisi logika statistik,
-    // jadi kita hanya perlu memaksanya render ulang.
-    // Method kosong ini sudah cukup untuk memicunya.
-}
 }

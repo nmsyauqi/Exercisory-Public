@@ -14,6 +14,11 @@ use App\Livewire\Participant\Checklist;
 use App\Livewire\Participant\DailyChecklist;
 use App\Livewire\Leaderboard;
 use App\Livewire\Admin\TaskManager;
+use App\Livewire\Participant\HistoryCalendar;
+use App\Livewire\Admin\UserManagement;
+use App\Livewire\Profile\UpdateProfile;
+use App\Livewire\Admin\ViewParticipantHistory;
+use App\Livewire\Auth\MagicEntry;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,55 +30,47 @@ use App\Livewire\Admin\TaskManager;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-Route::view('/', 'welcome')->name('home');
-
-
-// Route::get('/dashboard', function () {
-//     return view('dashboard');
-// })->middleware(['auth'])->name('dashboard');
+Route::redirect('/', '/Exercisory');
+Route::view('/Exercisory', 'welcome')->name('home');
 
 Route::middleware('guest')->group(function () {
-    Route::get('login', Login::class)
-        ->name('login');
-
-    Route::get('register', Register::class)
-        ->name('register');
+    Route::get('login', MagicEntry::class)->name('login');
+    Route::get('register', MagicEntry::class)->name('register');
+    Route::redirect('/register', '/login');
+    Route::redirect('/login', '/sign-in');
+    Route::get('sign-in', MagicEntry::class)->name('sign-in');
 });
 
 Route::middleware('auth')->group(function () {
     // Rute redirect utama
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/leaderboard', Leaderboard::class)->name('leaderboard');
+    Route::get('/profile', UpdateProfile::class)->name('profile.edit'); 
 
-    // Grup Admin
-    Route::middleware(['role:admin'])->prefix('admin')->name('admin.')->group(function () {
-    // INI YANG BENAR
-    Route::get('/tasks', TaskManager::class)->name('tasks');
-});
-
-    // Grup Participant
-    Route::middleware(['role:participant'])->prefix('participant')->name('participant.')->group(function () {
-
-        // Rute ini sekarang memanggil Kelas Livewire
-        Route::get('/checklist', DailyChecklist::class)->name('checklist');
-        
-    });
-});
-
-
-
-Route::middleware(['auth', 'role:admin'])->group(function () {
-    Route::get('email/verify', Verify::class)
-        ->middleware('throttle:6,1')
-        ->name('verification.notice');
-});
-
-Route::middleware('auth')->group(function () {
     Route::get('email/verify/{id}/{hash}', EmailVerificationController::class)
         ->middleware('signed')
         ->name('verification.verify');
 
     Route::post('logout', LogoutController::class)
         ->name('logout');
+
+    // Grup Admin
+    Route::middleware(['role:admin'])->prefix('admin')->name('admin.')->group(function () {
+        Route::get('email/verify', Verify::class)
+        ->middleware('throttle:6,1')
+        ->name('verification.notice');
+    // rute memeanggil livewire
+    Route::get('/tasks', TaskManager::class)->name('tasks');
+    Route::get('/users', UserManagement::class)->name('users.index');
+    Route::get('/users/{user}/history', ViewParticipantHistory::class)->name('users.history');
+});
+
+    // Grup Participant
+    Route::middleware(['role:participant'])->prefix('participant')->name('participant.')->group(function () {
+
+        // rute memeanggil livewire
+        Route::get('/checklist', DailyChecklist::class)->name('checklist');
+        Route::get('/history', HistoryCalendar::class)->name('history');
+        
+    });
 });

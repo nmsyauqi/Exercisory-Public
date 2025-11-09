@@ -9,29 +9,34 @@ use Illuminate\Support\Facades\Hash;
 
 class PenggunaSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        // 1. Akun Admin (role: admin)
+        // 1. (role: admin)
         User::create([
-            'name' => 'Admin Proyek',
-            'email' => 'admin@proyek.com',
-            'password' => Hash::make('password'), 
-            'role' => 'admin',
-        ]);
-
-        // 2. Akun Peserta (role: participant)
-        User::create([
-            'name' => 'Peserta Uji Coba',
-            'email' => 'peserta@proyek.com',
-            'password' => Hash::make('password'), 
+            'name' => 'satu',
+            'email' => '1@1.1',
+            'password' => Hash::make('fufufafa'), 
             'role' => 'participant',
         ]);
 
-        // Tambahkan 8 peserta dummy lagi
-        User::factory()->count(8)->create([
+        // 2. (role: participant)
+        User::create([
+            'name' => 'dua',
+            'email' => '2@2.2',
+            'password' => Hash::make('fufufafa'), 
+            'role' => 'participant',
+        ]);
+
+        // 3. (role: admin)
+        // User::create([
+        //     'name' => 'zero',
+        //     'email' => '0@0.0',
+        //     'password' => Hash::make('fufufafa'), 
+        //     'role' => 'admin',
+        // ]);
+
+        // dummy
+        User::factory()->count(0)->create([
             'role' => 'participant'
         ]);
     }

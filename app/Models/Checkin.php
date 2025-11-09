@@ -16,17 +16,13 @@ class Checkin extends Model
         'checked_at',
     ];
 
-    /**
-     * Mendapatkan user pemilik checkin.
-     */
+    // pemilik checkin
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    /**
-     * Mendapatkan tugas dari checkin.
-     */
+    // tugas terkait checkin
     public function task()
     {
         return $this->belongsTo(Task::class);

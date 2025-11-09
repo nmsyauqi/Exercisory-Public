@@ -42,6 +42,14 @@
                 </div>
             @endforelse
         </div>
-        
+        @if ($unreadNotifications->count() > 0)
+            <div class="p-2 border-t border-gray-400 bg-gray-200 text-center">
+                <button 
+                    wire:click="markAllAsRead"
+                    class="text-sm font-bold text-blue-700 hover:text-blue-900 underline">
+                    Tandai semua telah dibaca
+                </button>
+            </div>
+        @endif
     </div>
 </div>

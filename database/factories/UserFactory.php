@@ -22,6 +22,7 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
+        $fakerID = \Faker\Factory::create('id_ID');
         return [
             'name' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),

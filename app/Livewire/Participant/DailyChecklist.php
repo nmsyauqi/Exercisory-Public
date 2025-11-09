@@ -11,7 +11,7 @@ use Carbon\Carbon;
 class DailyChecklist extends Component
 {
     public $tasks;
-    public $checkedTasks = []; // Menyimpan ID tugas yang sudah dicek hari ini
+    public $checkedTasks = []; // simpan id task yang sudah dikerjakan
     public $today;
     public $totalPointsToday = 0;  
 
@@ -25,32 +25,29 @@ class DailyChecklist extends Component
         $this->calculateTotalPoints();
     }
 
-    /**
-     * Mengambil daftar tugas dan data checkin hari ini.
-     */
+    // ambil daftar tugas hari ini
     public function loadChecklist()
     {
-        // 1. Ambil semua tugas yang tersedia
-        $this->tasks = Task::orderBy('name', 'asc')->get();
+        // 1. semua tugas tersedia
+        $this->tasks = Task::orderBy('created_at', 'asc')->get();
 
-        // 2. Ambil data checkin user hari ini
+        // 2. data checkin user hari ini
         $userId = Auth::id();
         $this->checkedTasks = Checkin::where('user_id', $userId)
                                      ->where('date', $this->today)
-                                     ->pluck('task_id') // Ambil ID tugasnya saja
-                                     ->toArray(); // Konversi ke array
+                                     ->pluck('task_id') // id tugas
+                                     ->toArray(); // convert to array
     }
 
 
     public function calculateTotalPoints()
 {
-    // Kita cukup menjumlahkan poin dari tugas yang ID-nya 
-    // ada di dalam array $this->checkedTasks kita.
+    // jumlahkan poin yang tugas id nya ada di $this->checkedTasks
     $this->totalPointsToday = \App\Models\Task::whereIn('id', $this->checkedTasks)->sum('points');
 }
-    /**
-     * Dipanggil saat user mencentang/membatalkan centang checkbox.
-     */
+    // dipanggil saat checklist
+
+    #[On('data-updated')]
     public function toggleTask($taskId)
     {
         $userId = Auth::id();
@@ -74,27 +71,21 @@ class DailyChecklist extends Component
             ]);
 
             $this->checkedTasks[] = $taskId;
-
-            // ⛔️ JANGAN TARUH $this->calculateTotalPoints(); DI SINI
-            // ⛔️ JANGAN TARUH $this->dispatch('data-updated'); DI SINI
         }
 
-        // --- PINDAHKAN KEDUANYA KE SINI ---
-        // (Di luar if/else, tapi tetap di dalam fungsi toggleTask)
+        // --- PINDAHKAN KEDUANYA KE SINI (DI LUAR IF/ELSE) ---
         
-        // 1. Hitung ulang poin (baik itu menambah atau mengurangi)
+        // 1. Hitung ulang skor (untuk view peserta sendiri)
         $this->calculateTotalPoints();
         
-        // 2. "Teriak" ke komponen lain bahwa data berubah
-        $this->dispatch('data-updated');
+        // 2. "TERIAK" ke komponen lain bahwa data telah berubah
+        // $this->dispatch('data-updated');
     }
 
-    /**
-     * Merender tampilan.
-     */
+    // render tampilan
     public function render()
     {
         return view('livewire.participant.daily-checklist')
-               ->layout('layouts.app'); // Asumsi menggunakan layout app
+               ->layout('layouts.app'); // view layout.app
     }
 }

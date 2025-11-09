@@ -17,7 +17,7 @@ class Kernel extends ConsoleKernel
         
         // TAMBAHKAN BARIS INI:
         // Jalankan perintah 'app:send-reminders' setiap hari jam 8 malam (20:00)
-        $schedule->command('app:send-checklist-reminders')->dailyAt('20:00');
+        $schedule->command('app:send-checklist-reminders')->dailyAt('20:42');
     }
 
     /**
