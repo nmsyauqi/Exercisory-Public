@@ -8,35 +8,49 @@ use App\Models\User;
 use App\Models\Checkin;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Auth; 
 use Livewire\WithPagination;
-
 
 class TaskManager extends Component
 {
-    // properti untuk form
+    use WithPagination;
+
+    public function boot()
+    {
+        // 1. Ambil data TERBARU dari database
+        $user = User::find(Auth::id());
+
+        // 2. Cek apakah dia MASIH seorang admin DAN MASIH aktif?
+        if (strtolower($user->role) !== 'admin' || $user->trashed()) {
+            
+            // 3. Jika tidak, hentikan aksi ini SEKARANG JUGA.
+            abort(403, 'Akses Ditolak: Peran Anda telah diubah atau dinonaktifkan.');
+        }
+    }
+
+    // properti form
     public $name;
     public $points;
-    public $today;
 
-    // properti untuk manajemen state
+    // state editing
     public $selected_task_id;
     public $isEditing = false;
 
-    // validasi
+    // rules validasi
     protected $rules = [
         'name' => 'required|string|min:3|max:255',
         'points' => 'required|integer|min:1',
     ];
 
-    // submit tugas create atau update
+    // simpan atau update tugas
     public function save()
     {
         $this->validate();
 
         Task::updateOrCreate(
-            ['id' => $this->selected_task_id], // pencarian
+            ['id' => $this->selected_task_id],
             [
-                'name' => $this->name,         // data yang create atau update
+                'name' => $this->name,
                 'points' => $this->points
             ]
         );
@@ -45,7 +59,7 @@ class TaskManager extends Component
         $this->resetForm();
     }
 
-    // edit tugas
+    // mode edit
     public function edit($id)
     {
         $task = Task::findOrFail($id);
@@ -62,63 +76,61 @@ class TaskManager extends Component
             Task::findOrFail($id)->delete();
             session()->flash('message', 'Tugas berhasil dihapus.');
         } catch (\Exception $e) {
-            session()->flash('error', 'Gagal menghapus tugas. Mungkin terkait dengan data lain.');
+            session()->flash('error', 'Gagal menghapus tugas.');
         }
-        $this->resetForm(); // reset form jika user sedang mengedit item yang dihapus
+        $this->resetForm();
     }
 
+    // reset input form
     public function resetForm()
     {
         $this->reset(['name', 'points', 'selected_task_id', 'isEditing']);
     }
 
-    /**
-     * Render komponen
-     */
-    // notifikasi pengingat
+    // kirim notifikasi manual
     public function triggerReminders()
     {
         try {
-            // 1. panggil command artisan dari kode
             Artisan::call('app:send-checklist-reminders');
-
-            // 2. pesan sukses
-            session()->flash('message', 'Notifikasi pengingat telah dikirim ke peserta yang belum ceklis.');
-
+            session()->flash('message', 'Notifikasi pengingat telah dikirim.');
         } catch (\Exception $e) {
-            // 3. pesan eror
             session()->flash('error', 'Gagal mengirim notifikasi: ' . $e->getMessage());
         }
     }
 
-    // render
     public function render()
     {
+        // satpam render: cek akses admin setiap refresh
+        $currentUser = User::find(Auth::id());
+        if (strtolower($currentUser->role) !== 'admin' || $currentUser->trashed()) {
+            Auth::logout();
+            return redirect()->route('login')->with('error', 'Akses dicabut.');
+        }
+
+        // hitung statistik
         $totalParticipants = User::where('role', 'participant')->count();
         $totalTasks = Task::count();
-        $totalCheckinsToday = Checkin::where('date', Carbon::today()->toDateString())
-                             ->distinct('user_id')
-                             ->count('user_id');
-        $totalNotCheckinsToday = $totalParticipants - $totalCheckinsToday;
-        // logika statistik
         
+        // hitung peserta unik yang checkin hari ini
+        $totalCheckinsToday = Checkin::where('date', Carbon::today()->toDateString())
+                                     ->join('users', 'checkins.user_id', '=', 'users.id')
+                                     ->where('users.role', 'participant')
+                                     ->distinct('checkins.user_id')
+                                     ->count('checkins.user_id');
+                                     
+        // hitung yang belum checkin
+        $totalNotCheckinsToday = $totalParticipants - $totalCheckinsToday;
+        
+        // ambil data tugas dengan paginasi
         $tasks = Task::orderBy('created_at', 'desc')->paginate(10);
         
         return view('livewire.admin.task-manager', [
             'tasks' => $tasks,
-            
-            // statistik ke view
             'totalParticipants' => $totalParticipants,
             'totalTasks' => $totalTasks,
             'totalCheckinsToday' => $totalCheckinsToday,
-            'totalNotCheckinsToday' => $totalNotCheckinsToday   
-            
-        ])->layout('layouts.app'); // layout default laravel
-    }
-
-    // create
-    public function create()
-    {
-        $this->resetForm();
+            'totalNotCheckinsToday' => $totalNotCheckinsToday,
+            'today' => Carbon::today() // kirim tanggal hari ini ke view
+        ])->layout('layouts.app');
     }
 }

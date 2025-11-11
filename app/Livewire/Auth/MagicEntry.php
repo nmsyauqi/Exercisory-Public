@@ -15,25 +15,36 @@ class MagicEntry extends Component
     public $name = '';
     public $remember = false;
 
-    // Status tampilan
-    public $step = 1; // 1 = Input Email, 2 = Input Password/Nama
-    public $isRegistering = false; // Apakah kita sedang dalam mode register?
+    // status tampilan
+    public $step = 1; // 1 = input email, 2 = input password/nama
+    public $isRegistering = false;
 
-    // Pesan sambutan dinamis
+    // pesan sambutan dinamis
     public $greeting = 'Selamat datang!';
 
+    // langkah 1: cek email
     public function checkEmail()
     {
         $this->validate(['email' => 'required|email']);
 
-        $user = User::where('email', $this->email)->first();
+        // 1. UBAH QUERY: Cari SEMUA user, termasuk yang dinonaktifkan
+        $user = User::where('email', $this->email)->withTrashed()->first();
 
         if ($user) {
-            // Mode LOGIN
+            
+            // 2. TAMBAHKAN PENGECEKAN BARU: Apakah user ini dinonaktifkan?
+            if ($user->trashed()) {
+                // JIKA YA: Hentikan proses dan beri pesan error
+                $this->addError('email', 'Akun ini telah dinonaktifkan. Silakan hubungi administrator.');
+                return;
+            }
+
+            // Jika user ada dan AKTIF (Mode LOGIN)
             $this->isRegistering = false;
             $this->greeting = "Halo lagi, {$user->name}!";
+
         } else {
-            // Mode REGISTER
+            // Jika user BENAR-BENAR tidak ada (Mode REGISTER)
             $this->isRegistering = true;
             $this->greeting = "Sepertinya Anda baru di sini. Mari berkenalan!";
         }
@@ -41,30 +52,31 @@ class MagicEntry extends Component
         $this->step = 2; // Pindah ke langkah berikutnya
     }
 
+    // langkah 2: submit (login atau register)
     public function submit()
     {
-        // Validasi berdasarkan mode
+        // validasi berdasarkan mode
         if ($this->isRegistering) {
+            // --- LOGIKA REGISTER ---
             $this->validate([
                 'name' => 'required|min:3',
-                // PERHATIKAN KURUNG SIKU [ ] DI BAWAH INI
                 'password' => [
                     'required',
                     'min:8',
-                    // jokes.exe
-                    function (string $attribute, mixed $value, \Closure $fail) {
-                        $users = \App\Models\User::all();
-                        foreach ($users as $user) {
-                            if (\Illuminate\Support\Facades\Hash::check($value, $user->password)) {
-                                $fail("Password ini telah digunakan oleh '{$user->name}' dengan email '{$user->email}'. Coba password lain!");
-                                return;
-                            }
-                        }
-                    },// end jokes.exe
-                ], 
+                    // jokes.exe (validasi password unik)
+                    // function (string $attribute, mixed $value, \Closure $fail) {
+                    //     $users = User::all();
+                    //     foreach ($users as $user) {
+                    //         if (Hash::check($value, $user->password)) {
+                    //             $fail("Password ini telah digunakan oleh '{$user->name}'. Gunakan password lain!");
+                    //             return;
+                    //         }
+                    //     }
+                    // },
+                ],
             ]);
 
-            // Proses Register
+            // buat user baru
             $user = User::create([
                 'name' => $this->name,
                 'email' => $this->email,
@@ -75,7 +87,7 @@ class MagicEntry extends Component
             Auth::login($user, $this->remember);
 
         } else {
-            // Proses Login
+            // --- LOGIKA LOGIN ---
             $this->validate(['password' => 'required']);
 
             if (!Auth::attempt(['email' => $this->email, 'password' => $this->password], $this->remember)) {
@@ -84,11 +96,11 @@ class MagicEntry extends Component
             }
         }
 
-        // Redirect setelah sukses (Login atau Register)
+        // redirect ke dashboard setelah sukses
         return redirect()->intended(route('dashboard'));
     }
 
-    // Tombol "Kembali" untuk ganti email
+    // tombol "kembali" untuk ganti email
     public function resetStep()
     {
         $this->step = 1;
@@ -98,6 +110,7 @@ class MagicEntry extends Component
 
     public function render()
     {
+        // pastikan file view ini ada di resources/views/livewire/auth/magic-entry.blade.php
         return view('livewire.auth.magic-entry')->layout('layouts.auth');
     }
 }

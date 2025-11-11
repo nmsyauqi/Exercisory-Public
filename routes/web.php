@@ -36,7 +36,7 @@ Route::view('/Exercisory', 'welcome')->name('home');
 Route::middleware('guest')->group(function () {
     Route::get('login', MagicEntry::class)->name('login');
     Route::get('register', MagicEntry::class)->name('register');
-    Route::redirect('/register', '/login');
+    Route::redirect('/register', '/sign-in');
     Route::redirect('/login', '/sign-in');
     Route::get('sign-in', MagicEntry::class)->name('sign-in');
 });

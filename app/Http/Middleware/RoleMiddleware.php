@@ -1,38 +1,44 @@
 <?php
 
-namespace App\Http\Middleware; // <-- Perhatikan namespace-nya
+namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
+use App\Models\User;
 
-class RoleMiddleware 
+class RoleMiddleware
 {
-    /**
-     * Handle an incoming request.
-     *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
-     */
     public function handle(Request $request, Closure $next, ...$roles): Response
     {
-        // redirect ke login jika belum
+        // cek #1: apakah dia login?
         if (!Auth::check()) {
             return redirect('login');
         }
 
-        $user = Auth::user();
+        // cek #2: ambil data baru dari database, jangan percaya sesi
+        $user = User::find(Auth::id());
 
-        // cek role
+        // cek #3: cek apakah akun dinonaktifkan?
+        if ($user->trashed()) {
+            Auth::logout(); // logout paksa
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+            
+            // lempar ke login
+            return redirect('login')->with('error', 'Akun Anda telah dinonaktifkan oleh Admin.');
+        }
+
+        // cek #4: cek rolenya (dari data baru)
         foreach ($roles as $role) {
-            // pastikan admin == admin
             if (strtolower($user->role) == $role) {
-                // sesuai maka lanjutkan request
+                // jika cocok, izinkan request
                 return $next($request);
             }
         }
 
-        // tidak sesuai redirect ke home
+        // jika role tidak cocok, lempar ke halaman utama
         return redirect('/');
     }
 }

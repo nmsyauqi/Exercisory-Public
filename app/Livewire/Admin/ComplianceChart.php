@@ -24,25 +24,21 @@ class ComplianceChart extends Component
         $endDate = Carbon::today();
         $startDate = Carbon::today()->subDays(6); // 7 hari total
 
-        // 1. Dapatkan "pembagi"-nya: Berapa total peserta?
-        // Kita gunakan '->count()' agar efisien
+        // ambil total peserta
         $totalParticipants = User::where('role', 'participant')->count();
 
-        // 2. Dapatkan "pembilang"-nya: Berapa BANYAK PESERTA UNIK
-        //    yang ceklis setiap hari?
+        // ambil data checkin peserta unik
         $actualCheckins = Checkin::whereBetween('date', [$startDate, $endDate])
             ->select(
                 'date',
-                // Perubahan utamanya di sini:
-                // Kita tidak lagi COUNT(*), tapi COUNT(DISTINCT user_id)
                 DB::raw('COUNT(DISTINCT user_id) as daily_participants')
             )
             ->groupBy('date')
             ->orderBy('date', 'asc')
             ->get()
-            ->keyBy('date'); // Jadikan tanggal sebagai key
+            ->keyBy('date'); // jadikan tanggal sebagai key
 
-        // 3. Siapkan array data untuk 7 hari
+        // siapkan array
         $this->labels = [];
         $this->data = [];
 
@@ -51,10 +47,10 @@ class ComplianceChart extends Component
             
             $this->labels[] = $date->format('d M');
             
-            // Ambil jumlah peserta unik yang ceklis hari itu
+            // ambil jumlah peserta harian
             $participantCount = $actualCheckins[$dateString]->daily_participants ?? 0;
 
-            // 4. Hitung persentase (dan hindari error "dibagi nol")
+            // hitung persentase
             if ($totalParticipants > 0) {
                 $compliancePercent = ($participantCount / $totalParticipants) * 100;
             } else {

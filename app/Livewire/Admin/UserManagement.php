@@ -11,60 +11,54 @@ class UserManagement extends Component
 {
     use WithPagination;
 
+    // properti untuk modal konfirmasi
     public $confirmingDeactivationId = null;
     public $confirmingUser = null;
 
+    public function boot()
+    {
+        // ambil data terbaru
+        $user = User::find(Auth::id());
+
+        // satpam internal: cek peran dan status setiap request
+        if (strtolower($user->role) !== 'admin' || $user->trashed()) {
+            abort(403, 'Akses Ditolak.');
+        }
+    }
+
+    // siapkan data untuk modal deaktivasi
     public function askToDeactivate($userId)
     {
         $this->confirmingDeactivationId = $userId;
         $this->confirmingUser = User::find($userId);
     }
-    
 
-    /**
-     * Mengambil daftar pengguna dari database.
-     */
-    public function loadUsers()
-    {
-        // Ambil semua user, diurutkan berdasarkan nama
-        $this->users = User::orderBy('name', 'asc')->get();
-    }
-
-    /**
-     * Mengubah peran pengguna (Admin <-> Participant).
-     */
+    // ubah peran pengguna
     public function toggleRole($userId)
     {
-        // 1. Keamanan: Cek apakah user mencoba mengubah rolenya sendiri.
+        // keamanan: jangan ubah diri sendiri
         if ($userId == Auth::id()) {
-            // Kirim pesan error (kita akan tangani di view nanti, atau biarkan saja)
             session()->flash('error', 'Anda tidak dapat mengubah peran Anda sendiri.');
             return;
         }
 
-        // 2. Temukan user
         $user = User::find($userId);
 
         if ($user) {
-            // 3. Ubah rolenya
             if (strtolower($user->role) === 'admin') {
                 $user->role = 'participant';
             } else {
                 $user->role = 'admin';
             }
-            
             $user->save();
-            
-            // // 4. Muat ulang daftar pengguna
-            // $this->loadUsers();
-            // session()->flash('message', 'Peran ' . $user->name . ' berhasil diubah.');
+            session()->flash('message', 'Peran ' . $user->name . ' berhasil diubah.');
         }
     }
 
-    // deaktivasi user
+    // nonaktifkan pengguna (soft delete)
     public function deactivateUser($userId)
     {
-        // Keamanan: Cek apakah user mencoba menonaktifkan diri sendiri
+        // keamanan: jangan nonaktifkan diri sendiri
         if ($userId == Auth::id()) {
             session()->flash('error', 'Anda tidak dapat menonaktifkan akun Anda sendiri.');
             return;
@@ -72,26 +66,32 @@ class UserManagement extends Component
 
         $user = User::find($userId);
         if ($user) {
-            $user->delete(); // soft delete
+            $user->delete();
             session()->flash('message', 'Pengguna ' . $user->name . ' berhasil dinonaktifkan.');
             $this->confirmingDeactivationId = null;
         }
-        
     }
 
-    // reaktivasi user
+    // aktifkan kembali pengguna
     public function reactivateUser($userId)
     {
-        // find all user
         $user = User::withTrashed()->find($userId);
         if ($user) {
-            $user->restore(); // command reaktivasi
+            $user->restore();
             session()->flash('message', 'Pengguna ' . $user->name . ' berhasil diaktifkan kembali.');
         }
     }
+
     public function render()
     {
-        // TAMBAHKAN withTrashed() DI SINI
+        // satpam render: cek lagi saat refresh halaman
+        $currentUser = User::find(Auth::id());
+        if (strtolower($currentUser->role) !== 'admin' || $currentUser->trashed()) {
+            Auth::logout();
+            return redirect()->route('login')->with('error', 'Akses dicabut.'); 
+        }
+        
+        // ambil semua user termasuk yang nonaktif
         $users = User::withTrashed() 
             ->orderBy('name', 'asc')
             ->paginate(10);
