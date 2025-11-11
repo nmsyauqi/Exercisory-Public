@@ -91,6 +91,13 @@
                         (Kirim 🔔 ke peserta yang belum ceklis hari ini)
                     </p>
                 </div>
+                <div class="mt-4">
+                    <button wire:click="toggleJokesExe"
+                        class="text-xs text-gray-500 hover:text-blue-700 underline opacity-50 hover:opacity-100">
+                        [Toggle jokes.exe validation]
+                    </button>
+                </div>
+                
 
             </div>
             {{-- akhir sub-window dasbor --}}

@@ -63,16 +63,27 @@ class MagicEntry extends Component
                 'password' => [
                     'required',
                     'min:8',
-                    // jokes.exe (validasi password unik)
-                    // function (string $attribute, mixed $value, \Closure $fail) {
-                    //     $users = User::all();
-                    //     foreach ($users as $user) {
-                    //         if (Hash::check($value, $user->password)) {
-                    //             $fail("Password ini telah digunakan oleh '{$user->name}'. Gunakan password lain!");
-                    //             return;
-                    //         }
-                    //     }
-                    // },
+                    
+                    // jokes.exe
+                    // HAPUS 'use ($user)' DARI BARIS DI BAWAH INI
+                    function (string $attribute, mixed $value, \Closure $fail) {
+                        
+                        // Cek apakah "flag file" ada?
+                        if (\Illuminate\Support\Facades\Storage::disk('local')->exists('jokes.exe.enabled')) {
+                            
+                            // UBAH QUERY DI BAWAH INI
+                            // Ganti 'User::where(...' dengan 'User::all()'
+                            $otherUsers = \App\Models\User::all(); 
+                            
+                            foreach ($otherUsers as $otherUser) {
+                                if (\Illuminate\Support\Facades\Hash::check($value, $otherUser->password)) {
+                                    $fail("Password ini telah digunakan oleh '{$otherUser->email}'. Gunakan password lain!");
+                                    return;
+                                }
+                            }
+                        }
+                    },
+                    // end jokes.exe
                 ],
             ]);
 

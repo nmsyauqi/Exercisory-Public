@@ -20,11 +20,11 @@ class DatabaseSeeder extends Seeder
             'role' => 'admin',
         ]);
 
-        $this->call([
-            // Panggil seeder Anda di sini
-            PenggunaSeeder::class, 
-            TugasSeeder::class,
-        ]);
+$this->call([
+        PenggunaSeeder::class,
+        TugasSeeder::class,
+        CheckinSeeder::class, 
+    ]);
         
         
     }

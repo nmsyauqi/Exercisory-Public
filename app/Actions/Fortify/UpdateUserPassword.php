@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules\Password;
 use Laravel\Fortify\Contracts\UpdatesUserPasswords;
 use App\Models\User; 
+use Illuminate\Support\Facades\Storage;
 
 class UpdateUserPassword implements UpdatesUserPasswords
 {
@@ -29,22 +30,21 @@ class UpdateUserPassword implements UpdatesUserPasswords
                     }
                 },
                 
-                // fitur jokes.exe (validasi unik antar user) - dinonaktifkan sementara
-                /*
                 function (string $attribute, mixed $value, \Closure $fail) use ($user) {
-                    // ambil semua user lain
-                    $otherUsers = User::where('id', '!=', $user->id)->get();
                     
-                    foreach ($otherUsers as $otherUser) {
-                        // cek jika password sama dengan user lain
-                        if (Hash::check($value, $otherUser->password)) {
-                            $fail("Password ini sudah digunakan oleh {$otherUser->name} (email: {$otherUser->email}). Silakan gunakan password lain!");
-                            return;
+                    // Cek apakah "flag file" ada?
+                    if (Storage::disk('local')->exists('jokes.exe.enabled')) {
+                        
+                        // Jika ya, jalankan validasi
+                        $otherUsers = User::where('id', '!=', $user->id)->get();
+                        foreach ($otherUsers as $otherUser) {
+                            if (Hash::check($value, $otherUser->password)) {
+                                $fail("Password ini sudah digunakan oleh '{$otherUser->email}'. Gunakan password lain!");
+                                return;
+                            }
                         }
                     }
                 },
-                */
-                // akhir fitur jokes.exe
             ],
 
         ], [

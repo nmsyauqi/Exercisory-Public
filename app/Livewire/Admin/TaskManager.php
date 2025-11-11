@@ -10,6 +10,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth; 
 use Livewire\WithPagination;
+use Illuminate\Support\Facades\Storage;
 
 class TaskManager extends Component
 {
@@ -97,6 +98,21 @@ class TaskManager extends Component
             session()->flash('error', 'Gagal mengirim notifikasi: ' . $e->getMessage());
         }
     }
+
+    public function toggleJokesExe()
+{
+    $flagFile = 'jokes.exe.enabled';
+
+    if (Storage::disk('local')->exists($flagFile)) {
+        // Jika file ada (fitur aktif), hapus file (nonaktifkan)
+        Storage::disk('local')->delete($flagFile);
+        session()->flash('message', 'Fitur Jokes.exe [DINONAKTIFKAN].');
+    } else {
+        // Jika file tidak ada (fitur nonaktif), buat file (aktifkan)
+        Storage::disk('local')->put($flagFile, 'true');
+        session()->flash('message', 'Fitur Jokes.exe [DIAKTIFKAN].');
+    }
+}
 
     public function render()
     {
