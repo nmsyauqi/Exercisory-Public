@@ -120,24 +120,29 @@ class TaskManager extends Component
         $currentUser = User::find(Auth::id());
         if (strtolower($currentUser->role) !== 'admin' || $currentUser->trashed()) {
             Auth::logout();
-            return redirect()->route('login')->with('error', 'Akses dicabut.');
+            return redirect(route('login'), navigate: true)->with('error', 'Akses dicabut.');
         }
 
-        // hitung statistik
+        // --- INI DIA LOGIKA STATISTIK YANG AMAN ---
+        
+        // 1. Ambil total peserta (Hasil: 2)
         $totalParticipants = User::where('role', 'participant')->count();
         $totalTasks = Task::count();
         
-        // hitung peserta unik yang checkin hari ini
+        // 2. Ambil peserta yang sudah check-in
+        // (Query ini MENGGABUNGKAN checkins dengan users)
         $totalCheckinsToday = Checkin::where('date', Carbon::today()->toDateString())
                                      ->join('users', 'checkins.user_id', '=', 'users.id')
-                                     ->where('users.role', 'participant')
+                                     ->where('users.role', 'participant') // <-- HANYA hitung jika user-nya MASIH participant
                                      ->distinct('checkins.user_id')
                                      ->count('checkins.user_id');
+        // (Query ini sekarang akan menghasilkan 1, bukan 3)
                                      
-        // hitung yang belum checkin
-        $totalNotCheckinsToday = $totalParticipants - $totalCheckinsToday;
+        // 3. Hitung yang belum check-in
+        $totalNotCheckinsToday = $totalParticipants - $totalCheckinsToday; // (Hasil: 2 - 1 = 1)
         
-        // ambil data tugas dengan paginasi
+        // --- AKHIR DARI LOGIKA STATISTIK ---
+        
         $tasks = Task::orderBy('created_at', 'desc')->paginate(10);
         
         return view('livewire.admin.task-manager', [
@@ -146,7 +151,7 @@ class TaskManager extends Component
             'totalTasks' => $totalTasks,
             'totalCheckinsToday' => $totalCheckinsToday,
             'totalNotCheckinsToday' => $totalNotCheckinsToday,
-            'today' => Carbon::today() // kirim tanggal hari ini ke view
+            'today' => Carbon::today()
         ])->layout('layouts.app');
     }
 }
