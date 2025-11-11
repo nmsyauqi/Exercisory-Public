@@ -129,14 +129,18 @@ class TaskManager extends Component
         $totalParticipants = User::where('role', 'participant')->count();
         $totalTasks = Task::count();
         
-        // 2. Ambil peserta yang sudah check-in
-        // (Query ini MENGGABUNGKAN checkins dengan users)
         $totalCheckinsToday = Checkin::where('date', Carbon::today()->toDateString())
                                      ->join('users', 'checkins.user_id', '=', 'users.id')
-                                     ->where('users.role', 'participant') // <-- HANYA hitung jika user-nya MASIH participant
+                                     ->where('users.role', 'participant')
+                                     
+                                     // --- INI DIA PERBAIKANNYA ---
+                                     ->whereNull('users.deleted_at') // <-- HANYA hitung jika user-nya BELUM di-soft-delete
+                                     // --- SELESAI PERBAIKAN ---
+                                     
                                      ->distinct('checkins.user_id')
                                      ->count('checkins.user_id');
-        // (Query ini sekarang akan menghasilkan 1, bukan 3)
+                                     
+        $totalNotCheckinsToday = $totalParticipants - $totalCheckinsToday;
                                      
         // 3. Hitung yang belum check-in
         $totalNotCheckinsToday = $totalParticipants - $totalCheckinsToday; // (Hasil: 2 - 1 = 1)
