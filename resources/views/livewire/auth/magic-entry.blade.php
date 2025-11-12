@@ -45,7 +45,7 @@
             @endif
 
             {{-- Kolom Password (selalu ada di langkah 2) --}}
-            <div class="mt-4" x-data="{ showPassword: true }">
+            <div class="mt-4" x-data="{ showPassword: false }">
                 <label for="password" class="block text-sm font-bold text-gray-700 leading-5">Password</label>
                 <input id="password" class="mt-1 block w-full px-3 py-1.5 bg-white text-gray-900 border-t-2 border-l-2 border-gray-700 border-r-2 border-b-2 border-white focus:outline-none focus:bg-gray-100" :type="showPassword ? 'text' : 'password'" wire:model="password" required autocomplete="current-password" />
                 @error('password') <span class="mt-2 text-sm text-red-600">{{ $message }}</span> @enderror
