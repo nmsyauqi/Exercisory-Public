@@ -31,7 +31,7 @@
                     {{-- Kotak 1: Total Peserta (Biarkan) --}}
                     <div
                         class="bg-gray-200 p-3 border-t-2 border-l-2 border-gray-400 border-r-2 border-b-2 border-gray-500 shadow-inner">
-                        <h4 class="text-sm font-bold text-gray-700 uppercase">Total Peserta</h4>
+                        <h4 class="text-sm font-bold text-gray-700 uppercase">Total Peserta Aktif</h4>
                         <p class="text-3xl font-bold text-blue-700">{{ $totalParticipants }}</p>
                     </div>
 
