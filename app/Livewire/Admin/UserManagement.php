@@ -99,7 +99,7 @@ class UserManagement extends Component
         
         // ambil semua user termasuk yang nonaktif
         $users = User::withTrashed() 
-            ->orderBy('name', 'asc')
+            ->orderBy('email', 'asc')
             ->paginate(10);
         
         return view('livewire.admin.user-management', [
