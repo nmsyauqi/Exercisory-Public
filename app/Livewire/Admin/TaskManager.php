@@ -120,7 +120,7 @@ class TaskManager extends Component
         $currentUser = User::find(Auth::id());
         if (strtolower($currentUser->role) !== 'admin' || $currentUser->trashed()) {
             Auth::logout();
-            return redirect(route('login'), navigate: true)->with('error', 'Akses dicabut.');
+            return redirect()->route('login')->with('error', 'Akses dicabut.');
         }
 
         // --- INI DIA LOGIKA STATISTIK YANG AMAN ---

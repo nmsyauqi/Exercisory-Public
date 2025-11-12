@@ -25,8 +25,7 @@
 
                     {{-- Tombol Aksi Modal --}}
                     <div class="flex justify-end space-x-4 mt-6">
-                        <button wire:click="$set('confirmingDeactivationId', null)"
-                            class="font-semibold text-gray-900 px-4 py-2 bg-gray-300 border-t-2 border-l-2 border-white border-r-2 border-b-2 border-gray-600 shadow-sm active:shadow-inner active:bg-gray-200">
+                        <button wire:click="cancelDeactivation" {{-- <-- Panggil method baru kita --}} class="font-semibold ...">
                             Batal
                         </button>
                         <button wire:click="deactivateUser({{ $confirmingDeactivationId }})"

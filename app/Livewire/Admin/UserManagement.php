@@ -33,6 +33,12 @@ class UserManagement extends Component
         $this->confirmingUser = User::find($userId);
     }
 
+    public function cancelDeactivation()
+    {
+        $this->confirmingDeactivationId = null;
+        $this->confirmingUser = null;
+    }
+
     // ubah peran pengguna
     public function toggleRole($userId)
     {
