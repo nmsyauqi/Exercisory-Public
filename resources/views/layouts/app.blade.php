@@ -89,7 +89,7 @@
             <div class="bg-gray-300 overflow-hidden shadow-[8px_8px_0_0_#000000] border-t-4 border-l-4 border-white border-r-4 border-b-4 border-gray-700">
 
                 {{-- title bar dinamis (mengambil dari URL) --}}
-                <div class="bg-blue-700 text-white p-1.5 border-b-2 border-gray-700 border-t-2 border-l-2 border-r-2 border-blue-400 shadow-inner">
+                <div class="bg-red-700 text-white p-1.5 border-b-2 border-gray-700 border-t-2 border-l-2 border-r-2 border-red-400 shadow-inner">
                     <span class="font-bold text-sm">
                         C:\{{ \Illuminate\Support\Str::of(request()->path())->upper()->replace('/', '\\') }}.EXE
                     </span>

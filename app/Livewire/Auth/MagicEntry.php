@@ -122,6 +122,6 @@ class MagicEntry extends Component
     public function render()
     {
         // pastikan file view ini ada di resources/views/livewire/auth/magic-entry.blade.php
-        return view('livewire.auth.magic-entry')->layout('layouts.auth');
+        return view('livewire.auth.magic-entry')->layout('layouts.app');
     }
 }
