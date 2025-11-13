@@ -35,7 +35,7 @@
                         </td>
                         <td class="px-6 py-3 text-md font-bold text-gray-800">
                             {{-- Data bisa berupa objek (admin) atau array (peserta) --}}
-                            {{ $participant['name'] ?? $participant->name }}
+                            {{ $participant['name'] }}
                         </td>
 
                         @if ($isAdmin) {{-- Admin lihat Email --}}

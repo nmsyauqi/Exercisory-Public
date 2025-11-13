@@ -39,20 +39,27 @@ class Leaderboard extends Component
                 ->get();
 
         } else {
-            // query peserta biasa
             $scores = Checkin::join('tasks', 'checkins.task_id', '=', 'tasks.id')
-                ->select('checkins.user_id', DB::raw('SUM(tasks.points) as total_score'))
-                ->groupBy('checkins.user_id')
+                // 1. KITA GABUNGKAN (JOIN) DENGAN TABEL USERS
+                ->join('users', 'checkins.user_id', '=', 'users.id')
+                ->select(
+                    'checkins.user_id',
+                    'users.name', // <-- 2. KITA AMBIL NAMA USER
+                    DB::raw('SUM(tasks.points) as total_score')
+                )
+                // 3. KITA GROUP BERDASARKAN NAMA JUGA
+                ->groupBy('checkins.user_id', 'users.name')
                 ->orderBy('total_score', 'desc')
                 ->take(10)
                 ->get();
-            
+
             $rank = 1;
             foreach ($scores as $score) {
+                // 4. SEKARANG KITA MASUKKAN NAMA ASLINYA
                 $this->participants[] = [
                     'rank' => $rank,
-                    'name' => 'Peserta #' . $score->user_id, // Anonim
-                    'email' => null, // tidak ditampilkan
+                    'name' => $score->name, // <-- SEKARANG SUDAH ADA NAMA ASLI
+                    'email' => null,
                     'total_score' => $score->total_score
                 ];
                 $rank++;
