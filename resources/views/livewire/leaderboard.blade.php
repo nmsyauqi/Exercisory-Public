@@ -8,7 +8,7 @@
     @if ($isAdmin)
         <p class="text-sm text-gray-700 mb-6">&gt; (Tampilan Admin) Laporan lengkap skor semua peserta.</p>
     @else
-        <p class="text-sm text-gray-700 mb-6">&gt; (Tampilan Peserta) Menampilkan Top 10 peserta anonim.</p>
+        <p class="text-sm text-gray-700 mb-6">&gt; (Tampilan Peserta) Menampilkan Top 10 peserta.</p>
     @endif
 
 
