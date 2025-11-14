@@ -31,7 +31,7 @@
         @endif
 
         @if ($step == 2)
-            
+
             @if ($isRegistering)
                 <div class="mb-4">
                     <label for="name" class="block text-sm font-bold text-gray-700 leading-5">Nama Lengkap</label>
@@ -44,7 +44,14 @@
                 <label for="password" class="block text-sm font-bold text-gray-700 leading-5">Password</label>
                 <input id="password" class="mt-1 block w-full px-3 py-1.5 bg-white text-gray-900 border-t-2 border-l-2 border-gray-700 border-r-2 border-b-2 border-white focus:outline-none focus:bg-gray-100" :type="showPassword ? 'text' : 'password'" wire:model="password" required autocomplete="current-password" />
                 @error('password') <span class="mt-2 text-sm text-red-600">{{ $message }}</span> @enderror
-
+                @if ($showForgotPasswordLink)
+                    <div class="mt-4 text-sm">
+                        <a href="{{ route('password.request') }}" wire:navigate
+                            class="font-medium text-blue-700 hover:text-blue-900 underline">
+                            Lupa password Anda?
+                        </a>
+                    </div>
+                @endif
                 <div class="mt-2 flex items-center">
                     <input id="show_password_login" type="checkbox" x-model="showPassword" class="form-checkbox w-4 h-4 text-blue-700 bg-white border-gray-700 transition duration-150 ease-in-out">
                     <label for="show_password_login" class="ml-2 block text-sm text-gray-900 leading-5">

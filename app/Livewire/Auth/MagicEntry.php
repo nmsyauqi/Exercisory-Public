@@ -14,6 +14,7 @@ class MagicEntry extends Component
     public $password = '';
     public $name = '';
     public $remember = false;
+    public $showForgotPasswordLink = false;
 
     // status tampilan
     public $step = 1; // 1 = input email, 2 = input password/nama
@@ -63,7 +64,6 @@ class MagicEntry extends Component
                 'password' => [
                     'required',
                     'min:8',
-                    
                     // jokes.exe
                     // HAPUS 'use ($user)' DARI BARIS DI BAWAH INI
                     function (string $attribute, mixed $value, \Closure $fail) {
@@ -103,6 +103,7 @@ class MagicEntry extends Component
 
             if (!Auth::attempt(['email' => $this->email, 'password' => $this->password], $this->remember)) {
                 $this->addError('password', 'Password yang Anda masukkan salah.');
+                $this->showForgotPasswordLink = true; // Tampilkan link "Lupa Password"
                 return;
             }
         }
