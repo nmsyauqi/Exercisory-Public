@@ -122,7 +122,7 @@
                             
                             {{-- Kolom Riwayat (Sudah diperbaiki) --}}
                             <td class="px-6 py-4 whitespace-nowrap w-28">
-                                @if(strtolower($user->role) === 'participant')
+                                @if(strtolower($user->role) === 'participant' && !$user->trashed())
                                     <a href="{{ route('admin.users.history', $user) }}"
                                        wire:navigate
                                        class="font-semibold text-gray-900 px-3 py-1 bg-gray-300 border-t-2 border-l-2 border-white border-r-2 border-b-2 border-gray-600 shadow-sm active:shadow-inner active:bg-gray-200 text-xs">
