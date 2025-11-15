@@ -37,13 +37,10 @@ class UpdateProfile extends Component
      */
     public function updateProfile(UpdatesUserProfileInformation $updater)
     {
-        // Kita "lempar" tugas ini ke Fortify (bawaan Laravel)
-        // Dia akan otomatis menangani validasi (email unik, dll)
         $updater->update(Auth::user(), $this->state);
 
         session()->flash('message_profile', 'Profil berhasil diperbarui.');
         
-        // Penting: Refresh taskbar agar "Hi, [NamaBaru]" muncul
         return $this->redirect(route('profile.edit'), navigate: true);
     }
 

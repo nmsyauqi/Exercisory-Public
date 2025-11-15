@@ -28,51 +28,48 @@ class MagicEntry extends Component
     {
         $this->validate(['email' => 'required|email']);
 
-        // 1. UBAH QUERY: Cari SEMUA user, termasuk yang dinonaktifkan
+        // cari semua user 
         $user = User::where('email', $this->email)->withTrashed()->first();
 
         if ($user) {
             
-            // 2. TAMBAHKAN PENGECEKAN BARU: Apakah user ini dinonaktifkan?
+            // user trashed?
             if ($user->trashed()) {
-                // JIKA YA: Hentikan proses dan beri pesan error
+                // eror akun dinonaktifkan
                 $this->addError('email', 'Akun ini telah dinonaktifkan. Silakan hubungi administrator.');
                 return;
             }
 
-            // Jika user ada dan AKTIF (Mode LOGIN)
+            // aktif
             $this->isRegistering = false;
             $this->greeting = "Halo lagi, {$user->name}!";
 
         } else {
-            // Jika user BENAR-BENAR tidak ada (Mode REGISTER)
+            // tidak ditemukan
             $this->isRegistering = true;
             $this->greeting = "Sepertinya Anda baru di sini. Mari berkenalan!";
         }
 
-        $this->step = 2; // Pindah ke langkah berikutnya
+        $this->step = 2; 
     }
 
-    // langkah 2: submit (login atau register)
+    // step 2
     public function submit()
     {
         // validasi berdasarkan mode
         if ($this->isRegistering) {
-            // --- LOGIKA REGISTER ---
+            // registrasi
             $this->validate([
                 'name' => 'required|min:3',
                 'password' => [
                     'required',
                     'min:8',
                     // jokes.exe
-                    // HAPUS 'use ($user)' DARI BARIS DI BAWAH INI
                     function (string $attribute, mixed $value, \Closure $fail) {
                         
-                        // Cek apakah "flag file" ada?
+                        // flag jokes.exe ada?
                         if (\Illuminate\Support\Facades\Storage::disk('local')->exists('jokes.exe.enabled')) {
                             
-                            // UBAH QUERY DI BAWAH INI
-                            // Ganti 'User::where(...' dengan 'User::all()'
                             $otherUsers = \App\Models\User::all(); 
                             
                             foreach ($otherUsers as $otherUser) {
@@ -98,12 +95,12 @@ class MagicEntry extends Component
             Auth::login($user, $this->remember);
 
         } else {
-            // --- LOGIKA LOGIN ---
+            // masuk
             $this->validate(['password' => 'required']);
 
             if (!Auth::attempt(['email' => $this->email, 'password' => $this->password], $this->remember)) {
                 $this->addError('password', 'Password yang Anda masukkan salah.');
-                $this->showForgotPasswordLink = true; // Tampilkan link "Lupa Password"
+                $this->showForgotPasswordLink = true; // link lupa password
                 return;
             }
         }
