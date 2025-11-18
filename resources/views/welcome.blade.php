@@ -25,7 +25,7 @@
 
 
                 {{-- CARD 1: Tentang Proyek --}}
-                <a href="https://github.com/nmsyauqi/Exercisory" target="_blank"
+                <a href="https://www.portofolio.politeknikidn.id/detail/exercisory/undQZgjcOS" target="_blank"
                     class="scale-100 p-6 bg-gray-300 border-t-2 border-l-2 border-white border-r-2 border-b-2 border-gray-600 shadow-[2px_2px_0_0_#000000] flex motion-safe:hover:scale-[1.01] transition-all duration-250 focus:outline focus:outline-2 focus:outline-blue-700 active:border-r-2 active:border-b-2 active:border-white active:border-t-2 active:border-l-2 active:shadow-inner active:bg-gray-200">
                     <div>
                         <div>
