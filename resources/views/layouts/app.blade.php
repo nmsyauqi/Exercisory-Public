@@ -6,15 +6,7 @@
     @if (Route::has('login'))
         <div
             class="p-3 bg-gray-400 border-b-2 border-gray-600 shadow-md text-sm sm:fixed sm:top-0 sm:right-0 sm:flex sm:justify-end items-center w-full z-50">
-
-            @auth
-                {{-- Nama Pengguna --}}
-                <a href="{{ route('profile.edit') }}"
-                    class="ml-4 mr-4 px-3 py-1 font-bold text-gray-900 bg-gray-300 border-t-2 border-l-2 border-white border-r-2 border-b-2 border-gray-600 shadow-sm active:shadow-inner active:bg-gray-200">
-                    Hi, {{ Auth::user()->name }}
-                </a>
-
-                {{-- Tombol Home --}}
+{{-- Tombol Home --}}
                 <a href="{{ route('home') }}"
                     class="px-3 py-1 bg-gray-300 border-t-2 border-l-2 border-white border-r-2 border-b-2 border-gray-600 shadow-sm active:border-r-2 active:border-b-2 active:border-white active:border-t-2 active:border-l-2 active:shadow-inner active:bg-gray-200">
                     Home
@@ -66,6 +58,14 @@
                 @if (strtolower(Auth::user()->role) === 'participant')
                     <livewire:notification-bell /> 
                 @endif
+            @auth
+                {{-- Nama Pengguna --}}
+                <a href="{{ route('profile.edit') }}"
+                    class="ml-4 mr-4 px-3 py-1 font-bold text-gray-900 bg-gray-300 border-t-2 border-l-2 border-white border-r-2 border-b-2 border-gray-600 shadow-sm active:shadow-inner active:bg-gray-200">
+                    Hi, {{ Auth::user()->name }}
+                </a>
+
+                
 
             @else
                 <a href="{{ route('home') }}"
