@@ -42,7 +42,7 @@ Route::middleware('guest')->group(function () {
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 Route::get('/leaderboard', Leaderboard::class)->name('leaderboard');
 
-Route::get('/checklist', DailyChecklist::class)->name('participant.checklist');
+Route::get('/checklist', DailyChecklist::class)->name('checklist');
 Route::middleware('auth')->group(function () {
 Route::middleware('auth')->group(function () {
     

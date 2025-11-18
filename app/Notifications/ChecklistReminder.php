@@ -41,7 +41,7 @@ class ChecklistReminder extends Notification
         // di tabel 'notifications' sebagai JSON.
         return [
             'message' => 'Anda belum menyelesaikan ceklis harian Anda. Selesaikan sebelum tengah malam!',
-            'url' => route('participant.checklist'), // Link saat notifikasi diklik
+            'url' => route('checklist'), // Link saat notifikasi diklik
             'icon' => 'bell', // Ikon opsional
         ];
     }
