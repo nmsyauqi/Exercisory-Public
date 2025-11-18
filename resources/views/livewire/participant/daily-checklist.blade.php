@@ -15,7 +15,7 @@
             {{-- sub-window statistik & grafik --}}
             <div class="bg-gray-300 border-t-2 border-l-2 border-white border-r-2 border-b-2 border-gray-700 shadow-inner">
                 <div class="bg-blue-700 text-white p-1.5 border-b-2 border-gray-700">
-                    <span class="font-bold text-sm">C:\PARTICIPANT\STATS.EXE</span>
+                    <span class="font-bold text-sm">C:\STATS.EXE</span>
                 </div>
     
                 {{-- padding untuk konten di dalam --}}
@@ -45,7 +45,7 @@
                         {{-- sub-window daftar tugas --}}
                         <div class="bg-gray-300 border-t-2 border-l-2 border-white border-r-2 border-b-2 border-gray-700 shadow-inner">
                             <div class="bg-blue-700 text-white p-1.5 border-b-2 border-gray-700">
-                                <span class="font-bold text-sm">C:\PARTICIPANT\TASKS.EXE</span>
+                                <span class="font-bold text-sm">C:\TASKS.EXE</span>
                             </div>
                         
                             {{-- padding untuk konten di dalam --}}
