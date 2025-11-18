@@ -41,28 +41,29 @@ Route::middleware('guest')->group(function () {
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 Route::get('/leaderboard', Leaderboard::class)->name('leaderboard');
-Route::get('/checklist', DailyChecklist::class)->name('checklist');
 
+Route::get('/checklist', DailyChecklist::class)->name('participant.checklist');
 Route::middleware('auth')->group(function () {
-
+Route::middleware('auth')->group(function () {
+    
     Route::get('/profile', UpdateProfile::class)->name('profile.edit'); 
-    Route::get('email/verify/{id}/{hash}', EmailVerificationController::class)
-        ->middleware('signed')
-        ->name('verification.verify');
-    Route::post('logout', LogoutController::class)
-        ->name('logout');
+    // ... route logout, verify dll ...
 
     // Grup Admin
     Route::middleware(['role:admin'])->prefix('admin')->name('admin.')->group(function () {
-        Route::get('email/verify', Verify::class)
-        ->middleware('throttle:6,1')
-        ->name('verification.notice');
-    // rute memeanggil livewire
-    Route::get('/tasks', TaskManager::class)->name('tasks');
-    Route::get('/users', UserManagement::class)->name('users.index');
-    Route::get('/users/{user}/history', ViewParticipantHistory::class)->name('users.history');
-});
+        Route::get('/tasks', TaskManager::class)->name('tasks');
+        Route::get('/users', UserManagement::class)->name('users.index');
+        Route::get('/users/{user}/history', ViewParticipantHistory::class)->name('users.history');
+        // ...
+    });
 
+    // Grup Participant
+    Route::middleware(['role:participant'])->prefix('participant')->name('participant.')->group(function () {
+        // Route checklist SUDAH DIPINDAH KE ATAS (Publik), jadi hapus/komentar di sini
+        
+        Route::get('/history', HistoryCalendar::class)->name('history');
+    });
+});
     // Grup Participant
     Route::middleware(['role:participant'])->prefix('participant')->name('participant.')->group(function () {
         // rute memeanggil livewire
