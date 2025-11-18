@@ -46,10 +46,8 @@ class DailyChecklist extends Component
 
     public function calculateTotalPoints()
 {
-    // jumlahkan poin yang tugas id nya ada di $this->checkedTasks
     $this->totalPointsToday = \App\Models\Task::whereIn('id', $this->checkedTasks)->sum('points');
 }
-    // dipanggil saat checklist
 
     #[On('data-updated')]
     public function toggleTask($taskId)
@@ -57,7 +55,6 @@ class DailyChecklist extends Component
         $userId = Auth::id();
 
         if (in_array($taskId, $this->checkedTasks)) {
-            // --- FUNGSI UNCHECK ---
             Checkin::where('user_id', $userId)
                    ->where('task_id', $taskId)
                    ->where('date', $this->today)
@@ -66,7 +63,6 @@ class DailyChecklist extends Component
             $this->checkedTasks = array_diff($this->checkedTasks, [$taskId]);
 
         } else {
-            // --- FUNGSI CHECK ---
             Checkin::create([
                 'user_id' => $userId,
                 'task_id' => $taskId,
@@ -77,13 +73,8 @@ class DailyChecklist extends Component
             $this->checkedTasks[] = $taskId;
         }
 
-        // --- PINDAHKAN KEDUANYA KE SINI (DI LUAR IF/ELSE) ---
-        
-        // 1. Hitung ulang skor (untuk view peserta sendiri)
         $this->calculateTotalPoints();
         
-        // 2. "TERIAK" ke komponen lain bahwa data telah berubah
-        // $this->dispatch('data-updated');
     }
 
     // render tampilan
