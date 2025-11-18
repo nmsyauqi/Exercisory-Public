@@ -7,9 +7,6 @@
         <div
             class="p-3 bg-gray-400 border-b-2 border-gray-600 shadow-md text-sm sm:fixed sm:top-0 sm:right-0 sm:flex sm:justify-end items-center w-full z-50">
 
-            @guest
-            
-
             @auth
                 {{-- Nama Pengguna --}}
                 <a href="{{ route('profile.edit') }}"
@@ -75,56 +72,10 @@
                     class="font-semibold text-gray-900 px-3 py-1 bg-gray-300 border-t-2 border-l-2 border-white border-r-2 border-b-2 border-gray-600 shadow-sm active:shadow-inner active:bg-gray-200">
                     Home
                 </a>
-                <a href="{{ route('sign-in') }}"
+                <a href="{{ route('login') }}"
                     class="ml-4 font-semibold text-gray-900 px-3 py-1 bg-gray-300 border-t-2 border-l-2 border-white border-r-2 border-b-2 border-gray-600 shadow-sm active:shadow-inner active:bg-gray-200">
                     Sign In
                 </a>
-                {{-- Tombol Role-Specific (Admin/Participant) --}}
-                @if (strtolower(Auth::user()->role) === 'admin')
-                    <a href="{{ route('admin.tasks') }}"
-                        class="ml-4 px-3 py-1 bg-gray-300 border-t-2 border-l-2 border-white border-r-2 border-b-2 border-gray-600 shadow-sm active:border-r-2 active:border-b-2 active:border-white active:border-t-2 active:border-l-2 active:shadow-inner active:bg-gray-200">
-                        Tasks
-                    </a>
-
-                    <a href="{{ route('admin.users.index') }}"
-                        class="ml-4 px-3 py-1 bg-gray-300 border-t-2 border-l-2 border-white border-r-2 border-b-2 border-gray-600 shadow-sm ...">
-                        Users
-                    </a>
-                    {{-- <a href="{{ route('admin.participants.report') }}" ...> Laporan </a> --}}
-
-                @elseif (strtolower(Auth::user()->role) === 'participant')
-                    <a href="{{ route('participant.checklist') }}"
-                        class="ml-4 px-3 py-1 bg-gray-300 border-t-2 border-l-2 border-white border-r-2 border-b-2 border-gray-600 shadow-sm active:border-r-2 active:border-b-2 active:border-white active:border-t-2 active:border-l-2 active:shadow-inner active:bg-gray-200">
-                        Checklist
-                    </a>
-
-                    <a href="{{ route('participant.history') }}"
-                        class="ml-4 px-3 py-1 bg-gray-300 border-t-2 border-l-2 border-white border-r-2 border-b-2 border-gray-600 shadow-sm ...">
-                        History
-                    </a>
-                @endif
-
-                {{-- Tombol Umum (Leaderboard) --}}
-                <a href="{{ route('leaderboard') }}"
-                    class="ml-4 px-3 py-1 bg-gray-300 border-t-2 border-l-2 border-white border-r-2 border-b-2 border-gray-600 shadow-sm active:border-r-2 active:border-b-2 active:border-white active:border-t-2 active:border-l-2 active:shadow-inner active:bg-gray-200">
-                    Leaderboard
-                </a>
-
-
-
-                {{-- Tombol Logout --}}
-                <form method="POST" action="{{ route('logout') }}" class="inline-block ml-4">
-                    @csrf
-                    <button type="submit"
-                        class="font-semibold text-gray-900 px-3 py-1 bg-gray-300 border-t-2 border-l-2 border-white border-r-2 border-b-2 border-gray-600 shadow-sm active:border-r-2 active:border-b-2 active:border-white active:border-t-2 active:border-l-2 active:shadow-inner active:bg-gray-200">
-                        Logout
-                    </button>
-                </form>
-
-                {{-- Lonceng Notifikasi (Hanya Participant) --}}
-                @if (strtolower(Auth::user()->role) === 'participant')
-                    <livewire:notification-bell /> 
-                @endif
             @endauth
         </div>
     @endif
