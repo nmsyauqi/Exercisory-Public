@@ -48,9 +48,14 @@
                             </p>
                         </div>
                     </div>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        class="self-center w-6 h-6 mx-6 shrink-0 stroke-blue-700">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75" />
+                    </svg>
                 </a>
 
-                {{-- CARD 4: Teknologi --}}
+                {{-- CARD 2: Teknologi --}}
                 <a href="https://laravel.com/docs" target="_blank"
                     class="scale-100 p-6 bg-gray-300 border-t-2 border-l-2 border-white border-r-2 border-b-2 border-gray-600 shadow-[2px_2px_0_0_#000000] flex motion-safe:hover:scale-[1.01] transition-all duration-250 focus:outline focus:outline-2 focus:outline-blue-700 active:border-r-2 active:border-b-2 active:border-white active:border-t-2 active:border-l-2 active:shadow-inner active:bg-gray-200">
                     <div>
@@ -118,8 +123,8 @@
 
                 @guest {{-- TAMPILKAN INI HANYA JIKA PENGGUNA BELUM LOGIN --}}
 
-                    {{-- CARD 2: Daftar Akun Baru --}}
-                    <a href="{{ route('register') }}"
+                    {{-- CARD 3: Leaderboard --}}
+                    <a href="{{ route('leaderboard') }}"
                         class="scale-100 p-6 bg-gray-300 border-t-2 border-l-2 border-white border-r-2 border-b-2 border-gray-600 shadow-[2px_2px_0_0_#000000] flex motion-safe:hover:scale-[1.01] transition-all duration-250 focus:outline focus:outline-2 focus:outline-blue-700 active:border-r-2 active:border-b-2 active:border-white active:border-t-2 active:border-l-2 active:shadow-inner active:bg-gray-200">
                         <div>
                             <div
@@ -127,12 +132,12 @@
                                 <svg class="text-blue-700 fill-current w-7 h-7" xmlns="http://www.w3.org/2000/svg" fill="none"
                                     viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
+                                        d="M16.5 18.75h-9m9 0a3 3 0 013 3h-15a3 3 0 013-3m9 0v-4.5A3 3 0 0012 9.75h0A3 3 0 007.5 14.25v4.5m9 0v-4.5m0 4.5a3 3 0 01-3 3h-3a3 3 0 01-3-3m0 0v-4.5A3 3 0 0112 9.75h0A3 3 0 0116.5 14.25v4.5m-9-3.75h9" />
                                 </svg>
                             </div>
-                            <h2 class="mt-6 text-xl font-bold text-gray-900">Daftar</h2>
+                            <h2 class="mt-6 text-xl font-bold text-gray-900">Papan Peringkat</h2>
                             <p class="mt-4 text-sm leading-relaxed text-gray-700">
-                                Mulai perjalanan Anda! Daftar untuk melacak progres dan kumpulkan poin harian.
+                                Lihat 10 peserta dengan skor tertinggi di server.
                             </p>
                         </div>
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -142,29 +147,29 @@
                         </svg>
                     </a>
 
-                    {{-- CARD 3: Masuk / Login --}}
-                    <a href="{{ route('login') }}"
-                        class="scale-100 p-6 bg-gray-300 border-t-2 border-l-2 border-white border-r-2 border-b-2 border-gray-600 shadow-[2px_2px_0_0_#000000] flex motion-safe:hover:scale-[1.01] transition-all duration-250 focus:outline focus:outline-2 focus:outline-blue-700 active:border-r-2 active:border-b-2 active:border-white active:border-t-2 active:border-l-2 active:shadow-inner active:bg-gray-200">
-                        <div>
-                            <div
-                                class="flex items-center justify-center w-16 h-16 rounded-full bg-gray-400 border-t border-l border-white border-r border-b border-gray-500">
-                                <svg class="text-blue-700 fill-current w-7 h-7" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                    viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M15.75 5.25a3 3 0 013 3m3 0a6 6 0 01-7.029 5.912c-.563-.097-1.159.026-1.563.43L10.5 17.25H8.25v2.25H6v2.25H2.25v-2.818c0-.597.237-1.17.659-1.591l6.499-6.499c.404-.404.527-1 .43-1.563A6 6 0 1121.75 8.25z" />
-                                </svg>
+                    {{-- CARD 4: Checklist --}}
+                    <a href="{{ route('checklist') }}"
+                            class="scale-100 p-6 bg-gray-300 border-t-2 border-l-2 border-white border-r-2 border-b-2 border-gray-600 shadow-[2px_2px_0_0_#000000] flex motion-safe:hover:scale-[1.01] transition-all duration-250 focus:outline focus:outline-2 focus:outline-blue-700 active:border-r-2 active:border-b-2 active:border-white active:border-t-2 active:border-l-2 active:shadow-inner active:bg-gray-200">
+                            <div>
+                                <div
+                                    class="flex items-center justify-center w-16 h-16 rounded-full bg-gray-400 border-t border-l border-white border-r border-b border-gray-500">
+                                    <svg class="text-blue-700 fill-current w-7 h-7" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                        viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                </div>
+                                <h2 class="mt-6 text-xl font-bold text-gray-900">Ceklis Harian</h2>
+                                <p class="mt-4 text-sm leading-relaxed text-gray-700">
+                                    Lanjutkan misi harian Anda dan kumpulkan poin.
+                                </p>
                             </div>
-                            <h2 class="mt-6 text-xl font-bold text-gray-900">Masuk</h2>
-                            <p class="mt-4 text-sm leading-relaxed text-gray-700">
-                                Sudah punya akun? Masuk untuk melanjutkan misi harian Anda dan melihat papan peringkat.
-                            </p>
-                        </div>
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            class="self-center w-6 h-6 mx-6 shrink-0 stroke-blue-700">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75" />
-                        </svg>
-                    </a>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                class="self-center w-6 h-6 mx-6 shrink-0 stroke-blue-700">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75" />
+                            </svg>
+                        </a>
 
                 @endguest
 
