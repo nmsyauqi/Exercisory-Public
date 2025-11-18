@@ -34,15 +34,7 @@
                     {{-- <a href="{{ route('admin.participants.report') }}" ...> Laporan </a> --}}
 
                 @elseif (strtolower(Auth::user()->role) === 'participant')
-                    <a href="{{ route('participant.checklist') }}"
-                        class="ml-4 px-3 py-1 bg-gray-300 border-t-2 border-l-2 border-white border-r-2 border-b-2 border-gray-600 shadow-sm active:border-r-2 active:border-b-2 active:border-white active:border-t-2 active:border-l-2 active:shadow-inner active:bg-gray-200">
-                        Checklist
-                    </a>
-
-                    <a href="{{ route('participant.history') }}"
-                        class="ml-4 px-3 py-1 bg-gray-300 border-t-2 border-l-2 border-white border-r-2 border-b-2 border-gray-600 shadow-sm ...">
-                        History
-                    </a>
+                    
                 @endif
 
                 {{-- Tombol Umum (Leaderboard) --}}
@@ -72,7 +64,16 @@
                     class="font-semibold text-gray-900 px-3 py-1 bg-gray-300 border-t-2 border-l-2 border-white border-r-2 border-b-2 border-gray-600 shadow-sm active:shadow-inner active:bg-gray-200">
                     Home
                 </a>
-                <a href="{{ route('login') }}"
+                <a href="{{ route('participant.checklist') }}"
+                        class="ml-4 px-3 py-1 bg-gray-300 border-t-2 border-l-2 border-white border-r-2 border-b-2 border-gray-600 shadow-sm active:border-r-2 active:border-b-2 active:border-white active:border-t-2 active:border-l-2 active:shadow-inner active:bg-gray-200">
+                        Checklist
+                    </a>
+
+                    <a href="{{ route('participant.history') }}"
+                        class="ml-4 px-3 py-1 bg-gray-300 border-t-2 border-l-2 border-white border-r-2 border-b-2 border-gray-600 shadow-sm ...">
+                        History
+                    </a>
+                <a href="{{ route('sign-in') }}"
                     class="ml-4 font-semibold text-gray-900 px-3 py-1 bg-gray-300 border-t-2 border-l-2 border-white border-r-2 border-b-2 border-gray-600 shadow-sm active:shadow-inner active:bg-gray-200">
                     Sign In
                 </a>
