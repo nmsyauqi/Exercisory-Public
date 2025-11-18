@@ -37,23 +37,18 @@ Route::middleware('guest')->group(function () {
     Route::redirect('/register', '/sign-in');
     Route::redirect('/login', '/sign-in');  
     Route::get('sign-in', MagicEntry::class)->name('sign-in');
-
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    Route::get('/leaderboard', Leaderboard::class)->name('leaderboard');
-    Route::get('/checklist', DailyChecklist::class)->name('checklist');
-
 });
+
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+Route::get('/leaderboard', Leaderboard::class)->name('leaderboard');
+Route::get('/checklist', DailyChecklist::class)->name('checklist');
 
 Route::middleware('auth')->group(function () {
 
-    //Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    //Route::get('/leaderboard', Leaderboard::class)->name('leaderboard');
     Route::get('/profile', UpdateProfile::class)->name('profile.edit'); 
-
     Route::get('email/verify/{id}/{hash}', EmailVerificationController::class)
         ->middleware('signed')
         ->name('verification.verify');
-
     Route::post('logout', LogoutController::class)
         ->name('logout');
 
@@ -70,10 +65,8 @@ Route::middleware('auth')->group(function () {
 
     // Grup Participant
     Route::middleware(['role:participant'])->prefix('participant')->name('participant.')->group(function () {
-
         // rute memeanggil livewire
         //Route::get('/checklist', DailyChecklist::class)->name('checklist');
         Route::get('/history', HistoryCalendar::class)->name('history');
-        
     });
 });

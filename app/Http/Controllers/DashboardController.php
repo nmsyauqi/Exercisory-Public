@@ -22,7 +22,7 @@ class DashboardController extends Controller
         if ($role === 'admin') {
             return redirect()->route('admin.tasks');
         } elseif ($role === 'participant') {
-            return redirect()->route('participant.checklist');
+            return redirect()->route('checklist');
         } else {
             Auth::logout();
             $request->session()->invalidate();

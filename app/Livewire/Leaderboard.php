@@ -14,8 +14,12 @@ class Leaderboard extends Component
     public $participants = [];      public $isAdmin = false;   
     public function mount()
     {
-        // cek role
+        if (Auth::check()) {
         $this->isAdmin = Auth::user()->role === 'admin';
+    } else {
+        // Kalau Guest, anggap saja bukan admin
+        $this->isAdmin = false;
+    }
         $this->loadLeaderboard();
     }
 
@@ -40,14 +44,14 @@ class Leaderboard extends Component
 
         } else {
             $scores = Checkin::join('tasks', 'checkins.task_id', '=', 'tasks.id')
-                // 1. KITA GABUNGKAN (JOIN) DENGAN TABEL USERS
+
                 ->join('users', 'checkins.user_id', '=', 'users.id')
                 ->select(
                     'checkins.user_id',
-                    'users.name', // <-- 2. KITA AMBIL NAMA USER
+                    'users.name', 
                     DB::raw('SUM(tasks.points) as total_score')
                 )
-                // 3. KITA GROUP BERDASARKAN NAMA JUGA
+                
                 ->groupBy('checkins.user_id', 'users.name')
                 ->orderBy('total_score', 'desc')
                 ->take(10)
