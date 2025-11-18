@@ -33,7 +33,7 @@ class DailyChecklist extends Component
     public function loadChecklist()
     {
         // 1. semua tugas tersedia
-        $this->tasks = Task::orderBy('created_at', 'asc')->paginate(5);
+        $this->tasks = Task::orderBy('created_at', 'asc')->get();
 
         // 2. data checkin user hari ini
         $userId = Auth::id();
