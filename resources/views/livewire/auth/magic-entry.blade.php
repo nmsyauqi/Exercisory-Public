@@ -34,7 +34,7 @@
 
             @if ($isRegistering)
                 <div class="mb-4">
-                    <label for="name" class="block text-sm font-bold text-gray-700 leading-5">Nama Lengkap</label>
+                    <label for="name" class="block text-sm font-bold text-gray-700 leading-5">Nama</label>
                     <input id="name" class="mt-1 block w-full px-3 py-1.5 bg-white text-gray-900 border-t-2 border-l-2 border-gray-700 border-r-2 border-b-2 border-white focus:outline-none focus:bg-gray-100" type="text" wire:model="name" required autofocus autocomplete="name" />
                     @error('name') <span class="mt-2 text-sm text-red-600">{{ $message }}</span> @enderror
                 </div>
