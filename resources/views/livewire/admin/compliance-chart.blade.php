@@ -1,7 +1,7 @@
 <div class="bg-gray-300 border-t-4 border-l-4 border-white border-r-4 border-b-4 border-gray-700 shadow-[8px_8px_0_0_#000000] p-4 sm:p-8">
     
     <div class="bg-blue-700 text-white p-1.5 mb-6 border-t-2 border-l-2 border-blue-400 border-r-2 border-b-2 border-blue-900 shadow-inner">
-        <span class="font-bold text-sm">C:\ADMIN\COMPLIANCE_CHART.EXE</span>
+        <span class="font-bold text-sm">C:\ADMIN\CHART.EXE</span>
     </div>
     <h3 class="text-xl font-bold text-gray-900 mb-4">
         Persentase Peserta Berpartisipasi 7 Hari Terakhir
