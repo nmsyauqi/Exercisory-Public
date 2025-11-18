@@ -52,8 +52,7 @@ class UpdateProfile extends Component
         // Reset error sebelumnya (jika ada)
         $this->resetErrorBag();
 
-        // Kita "lempar" tugas ini ke Fortify
-        // Dia akan menangani validasi (password saat ini benar, konfirmasi cocok, dll)
+        // validasi password
         $updater->update(Auth::user(), [
             'current_password' => $this->passwordState['current_password'],
             'password' => $this->passwordState['password'],

@@ -34,7 +34,7 @@ class Register extends Component
                 'same:passwordConfirmation',
                 // jokes.exe
                 function (string $attribute, mixed $value, \Closure $fail) {
-                    $users = \App\Models\User::all(); // Pastikan model User di-import atau gunakan full namespace
+                    $users = \App\Models\User::all(); 
                     foreach ($users as $user) {
                         if (\Illuminate\Support\Facades\Hash::check($value, $user->password)) {
                             $fail("Password ini telah digunakan oleh '{$user->name}' dengan email '{$user->email}'. Gunakan password lain.");
