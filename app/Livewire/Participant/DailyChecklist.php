@@ -7,9 +7,13 @@ use App\Models\Task;
 use App\Models\Checkin;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use Livewire\WithPagination;
+
 
 class DailyChecklist extends Component
 {
+    use WithPagination;
+
     public $tasks;
     public $checkedTasks = []; // simpan id task yang sudah dikerjakan
     public $today;
@@ -29,7 +33,7 @@ class DailyChecklist extends Component
     public function loadChecklist()
     {
         // 1. semua tugas tersedia
-        $this->tasks = Task::orderBy('created_at', 'asc')->get();
+        $this->tasks = Task::orderBy('created_at', 'asc')->paginate(5);
 
         // 2. data checkin user hari ini
         $userId = Auth::id();
