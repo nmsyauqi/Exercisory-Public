@@ -80,12 +80,7 @@
                                             <p>&gt; Status: IDLE</p>
                                         </div>
                                     @endforelse
-                                    @guest
-    <div class="mt-4 p-3 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700">
-        <p class="font-bold">Mode Tamu</p>
-        <p>Anda sedang melihat mode pratinjau. <a href="{{ route('sign-in') }}" class="underline">Login</a> untuk mulai mengumpulkan poin!</p>
-    </div>
-@endguest
+                                    
                                 </div>
                                 {{-- akhir daftar tugas --}}
                             </div>
