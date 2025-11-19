@@ -80,7 +80,6 @@
                                             <p>&gt; Status: IDLE</p>
                                         </div>
                                     @endforelse
-                                    
                                 </div>
                                 {{-- akhir daftar tugas --}}
                             </div>
