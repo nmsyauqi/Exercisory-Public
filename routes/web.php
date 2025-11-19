@@ -47,7 +47,6 @@ Route::get('/checklist', DailyChecklist::class)->name('checklist');
 Route::middleware('auth')->group(function () {
     
     Route::get('/profile', UpdateProfile::class)->name('profile.edit'); 
-    // ... route logout, verify dll ...
 
     // grup adm
     Route::middleware(['role:admin'])->prefix('admin')->name('admin.')->group(function () {
@@ -61,7 +60,7 @@ Route::middleware('auth')->group(function () {
     Route::middleware(['role:participant'])->prefix('participant')->name('participant.')->group(function () {        
         Route::get('/history', HistoryCalendar::class)->name('history');
     });
-});
+    
     // grup par
     Route::middleware(['role:participant'])->prefix('participant')->name('participant.')->group(function () {
         // rute memeanggil livewire
