@@ -45,6 +45,7 @@ Route::get('/leaderboard', Leaderboard::class)->name('leaderboard');
 Route::get('/checklist', DailyChecklist::class)->name('checklist');
 
 Route::middleware('auth')->group(function () {
+Route::middleware('auth')->group(function () {
     
     Route::get('/profile', UpdateProfile::class)->name('profile.edit'); 
     // ... route logout, verify dll ...
