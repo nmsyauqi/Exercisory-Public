@@ -43,13 +43,13 @@ Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard
 Route::get('/leaderboard', Leaderboard::class)->name('leaderboard');
 
 Route::get('/checklist', DailyChecklist::class)->name('checklist');
-Route::middleware('auth')->group(function () {
+
 Route::middleware('auth')->group(function () {
     
     Route::get('/profile', UpdateProfile::class)->name('profile.edit'); 
     // ... route logout, verify dll ...
 
-    // Grup Admin
+    // grup adm
     Route::middleware(['role:admin'])->prefix('admin')->name('admin.')->group(function () {
         Route::get('/tasks', TaskManager::class)->name('tasks');
         Route::get('/users', UserManagement::class)->name('users.index');
@@ -57,14 +57,12 @@ Route::middleware('auth')->group(function () {
         // ...
     });
 
-    // Grup Participant
-    Route::middleware(['role:participant'])->prefix('participant')->name('participant.')->group(function () {
-        // Route checklist SUDAH DIPINDAH KE ATAS (Publik), jadi hapus/komentar di sini
-        
+    // grup par
+    Route::middleware(['role:participant'])->prefix('participant')->name('participant.')->group(function () {        
         Route::get('/history', HistoryCalendar::class)->name('history');
     });
 });
-    // Grup Participant
+    // grup par
     Route::middleware(['role:participant'])->prefix('participant')->name('participant.')->group(function () {
         // rute memeanggil livewire
         //Route::get('/checklist', DailyChecklist::class)->name('checklist');
