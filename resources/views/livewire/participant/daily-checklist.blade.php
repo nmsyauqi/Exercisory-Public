@@ -61,32 +61,20 @@
                                 <div class="space-y-1">
                                     @forelse ($tasks as $task)
                                         <div class="flex items-center p-3 border-b-2 border-gray-400 hover:bg-gray-200">
-                                            <input id="task-{{ $task->id }}" type="checkbox" wire:click="toggleTask({{ $task->id }})"
-                                                class="form-checkbox h-5 w-5 text-blue-700 bg-white border-2 border-gray-700 focus:outline-none"
-                                                @if
-                                                    (in_array($task->id, $checkedTasks)) checked 
-                                                @endif 
-                                                @if(Auth::check() && Auth::user()->role === 'admin')
-                                                    {{-- Tampilan untuk Admin (Disabled Button) --}}
-                                                    <button disabled class="opacity-50 cursor-not-allowed ...">
-                                                        Admin View
-                                                    </button>
-                                                @elseif(Auth::check())
-                                                    {{-- Tampilan Participant (Bisa Klik) --}}
-                                                    <button wire:click="toggleTask({{ $task->id }})" ...>
-                                                        Selesai
-                                                    </button>
-                                                @else
-                                                    {{-- Tampilan Guest (Redirect) --}}
-                                                    <a href="{{ route('sign-in') }}" ...>Selesai</a>
-                                                @endif>
+
+                                            {{-- CHECKBOX DENGAN LOGIKA --}}
+                                            <input id="task-{{ $task->id }}" type="checkbox"
+                                                class="form-checkbox h-5 w-5 text-blue-700 bg-white border-2 border-gray-700 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
+                                                {{-- 1. Cek apakah sudah dikerjakan (checked) --}} @if(in_array($task->id, $checkedTasks)) checked @endif
+                                                {{-- 2. LOGIKA HAK AKSES --}} @if(Auth::check() && Auth::user()->role === 'admin') {{-- Jika Admin: Matikan
+                                                checkbox (Disabled) --}} disabled @else {{-- Jika Participant/Guest: Aktifkan wire:click --}} {{-- (Guest
+                                                akan di-redirect oleh backend jika klik) --}} wire:click="toggleTask({{ $task->id }})" @endif>
 
                                             <label for="task-{{ $task->id }}" class="ml-4 block text-lg font-bold text-gray-900 cursor-pointer">
                                                 {{ $task->name }}
                                             </label>
 
-                                            <span class="ml-auto px-2 text-md font-bold text-green-700"
-                                                style="text-shadow: 0 0 5px rgba(0,255,0,0.7);">
+                                            <span class="ml-auto px-2 text-md font-bold text-green-700" style="text-shadow: 0 0 5px rgba(0,255,0,0.7);">
                                                 +{{ $task->points }} Poin
                                             </span>
                                         </div>
@@ -96,10 +84,13 @@
                                             <p>&gt; Status: IDLE</p>
                                         </div>
                                     @endforelse
+
+                                    {{-- Pesan Khusus Tamu --}}
                                     @guest
                                         <div class="mt-4 p-3 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700">
                                             <p class="font-bold">Mode Tamu</p>
-                                            <p>Anda sedang melihat mode pratinjau. <a href="{{ route('sign-in') }}" class="underline">Login</a> untuk mulai mengumpulkan poin!</p>
+                                            <p>Anda sedang melihat mode pratinjau. <a href="{{ route('sign-in') }}" class="underline">Login</a> untuk mulai
+                                                mengumpulkan poin!</p>
                                         </div>
                                     @endguest
                                 </div>
