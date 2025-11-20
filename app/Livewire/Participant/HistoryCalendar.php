@@ -10,6 +10,7 @@ use App\Models\Task;
 
 class HistoryCalendar extends Component
 {
+    public $passingGrade = 75;
     public $userId = null;
     public $currentDate;
     public $daysInMonth;

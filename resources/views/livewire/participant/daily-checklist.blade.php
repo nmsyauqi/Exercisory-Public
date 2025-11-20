@@ -59,6 +59,21 @@
                         
                                 {{-- daftar tugas --}}
                                 <div class="space-y-1">
+                                    @if(Auth::check() && Auth::user()->role === 'admin')
+                                        {{-- Tampilan untuk Admin (Disabled Button) --}}
+                                        <button disabled class="opacity-50 cursor-not-allowed ...">
+                                            Admin View
+                                        </button>
+                                    @elseif(Auth::check())
+                                        {{-- Tampilan Participant (Bisa Klik) --}}
+                                        <button wire:click="toggleTask({{ $task->id }})" ...>
+                                            Selesai
+                                        </button>
+                                    @else
+                                        {{-- Tampilan Guest (Redirect) --}}
+                                        <a href="{{ route('sign-in') }}" ...>Selesai</a>
+                                    @endif
+                                    
                                     @forelse ($tasks as $task)
                                         <div class="flex items-center p-3 border-b-2 border-gray-400 hover:bg-gray-200">
                                             <input id="task-{{ $task->id }}" type="checkbox"

@@ -65,11 +65,19 @@ class DailyChecklist extends Component
     #[On('data-updated')]
     public function toggleTask($taskId)
     {
-        // PROTEKSI: Jika Guest mencoba klik, lempar ke halaman login
+        // redirect guest mencoba ceklis
         if (!Auth::check()) {
             return redirect()->route('sign-in');
         }
 
+        $user = Auth::user();
+
+        if ($user->role !== 'participant') {
+            // Opsional: Kirim notifikasi error atau diamkan saja
+            session()->flash('error', 'Admin tidak dapat mengerjakan tugas peserta.');
+            return; 
+        }
+        
         $userId = Auth::id();
 
         if (in_array($taskId, $this->checkedTasks)) {
