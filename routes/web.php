@@ -58,10 +58,6 @@ Route::middleware('auth')->group(function () {
         // ...
     });
 
-    // grup par
-    Route::middleware(['role:participant'])->prefix('participant')->name('participant.')->group(function () {        
-        Route::get('/history', HistoryCalendar::class)->name('history');
-    });
     
     // grup par
     Route::middleware(['role:participant'])->prefix('participant')->name('participant.')->group(function () {
