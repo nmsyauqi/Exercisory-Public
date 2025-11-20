@@ -2,7 +2,7 @@
 
 **Sistem Gamifikasi untuk Pelacakan Kedisiplinan Kesehatan Harian**
 
-Project ini adalah aplikasi web berbasis **Laravel** yang dirancang untuk membantu peserta menjaga rutinitas kesehatan mereka. Bukan sekadar mencatat, tapi kami membuatnya seru dengan sistem **Poin, dan Leaderboard**!
+Project ini adalah aplikasi web berbasis **Laravel** yang dirancang untuk membantu peserta menjaga rutinitas kesehatan mereka. Bukan sekadar mencatat, tapi kami membuatnya seru dengan sistem **Poin dan Leaderboard**!
 
 ---
 

@@ -94,16 +94,32 @@ $checkins = Checkin::where('user_id', $this->userId) // <-- SUDAH DIUBAH
                 // Ini adalah hari yang valid
                 else {
                     $status = 'none'; // Default: tidak ada check-in
-                    
+
                     if (isset($checkins[$dayCounter])) {
                         $checkinsForDay = $checkins[$dayCounter]->count();
-                        
-                        // Tentukan status berdasarkan jumlah check-in
-                        if ($checkinsForDay >= $this->totalTasks) {
-                            $status = 'full'; // Kepatuhan penuh (hijau)
+
+                        // logika > 0
+                        if ($this->totalTasks > 0) {
+                            // persentase tugas dikerjakan
+                            $percentage = ($checkinsForDay / $this->totalTasks) * 100;
                         } else {
-                            $status = 'partial'; // Kepatuhan sebagian (kuning)
+                            $percentage = 0;
                         }
+
+                        // standar KKM
+                        $kkm = 75;
+
+                        // logika persentase
+                        if ($percentage >= $kkm) {
+                            $status = 'full';    // hijau
+                        } elseif ($percentage > 0) {
+                            $status = 'partial'; // Kuning 
+                        } else {
+                            $status = 'none';    // Putih 
+                        }
+
+                    } else {
+                        $status = 'none'; // tidak ada check-in
                     }
                     
                     $week[] = ['day' => $dayCounter, 'status' => $status];
