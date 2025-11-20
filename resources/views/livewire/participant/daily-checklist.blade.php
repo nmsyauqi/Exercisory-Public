@@ -61,10 +61,11 @@
                                 <div class="space-y-1">
                                     @forelse ($tasks as $task)
                                         <div class="flex items-center p-3 border-b-2 border-gray-400 hover:bg-gray-200">
-                                            <input id="task-{{ $task->id }}" type="checkbox"
-                                                class="form-checkbox h-5 w-5 text-blue-700 bg-white border-2 border-gray-700 focus:outline-none" wire:click="toggleTask({{ $task->id }})">
-
-                                                @if(in_array($task->id, $checkedTasks)) checked @endif 
+                                            <input id="task-{{ $task->id }}" type="checkbox" wire:click="toggleTask({{ $task->id }})"
+                                                class="form-checkbox h-5 w-5 text-blue-700 bg-white border-2 border-gray-700 focus:outline-none"
+                                                @if
+                                                    (in_array($task->id, $checkedTasks)) checked 
+                                                @endif 
                                                 @if(Auth::check() && Auth::user()->role === 'admin')
                                                     {{-- Tampilan untuk Admin (Disabled Button) --}}
                                                     <button disabled class="opacity-50 cursor-not-allowed ...">
@@ -78,8 +79,8 @@
                                                 @else
                                                     {{-- Tampilan Guest (Redirect) --}}
                                                     <a href="{{ route('sign-in') }}" ...>Selesai</a>
-                                                @endif
-                                                
+                                                @endif>
+
                                             <label for="task-{{ $task->id }}" class="ml-4 block text-lg font-bold text-gray-900 cursor-pointer">
                                                 {{ $task->name }}
                                             </label>
