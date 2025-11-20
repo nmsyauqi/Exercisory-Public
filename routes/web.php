@@ -19,6 +19,7 @@ use App\Livewire\Admin\UserManagement;
 use App\Livewire\Profile\UpdateProfile;
 use App\Livewire\Admin\ViewParticipantHistory;
 use App\Livewire\Auth\MagicEntry;
+use App\Livewire\Auth\ForgotPassword;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,6 +38,7 @@ Route::middleware('guest')->group(function () {
     Route::redirect('/register', '/sign-in');
     Route::redirect('/login', '/sign-in');  
     Route::get('sign-in', MagicEntry::class)->name('sign-in');
+    Route::get('/forgot-password', ForgotPassword::class)->name('password.request');
 });
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
