@@ -24,20 +24,26 @@ class ForgotPassword extends Component
     {
         $this->validate();
 
-        // Kirim link reset password
-        $response = Password::broker()->sendResetLink(['email' => $this->email]);
+        try {
+            // Kirim link reset password
+            $response = Password::broker()->sendResetLink(['email' => $this->email]);
 
-        if ($response == Password::RESET_LINK_SENT) {
-            $this->emailSent = true;
-            $this->status = trans($response);
-        } else {
-            $this->addError('email', trans($response));
+            if ($response == Password::RESET_LINK_SENT) {
+                $this->emailSent = true;
+                $this->status = trans($response);
+            } else {
+                $this->addError('email', trans($response));
+            }
+        } catch (\Exception $e) {
+            // Tangkap error jika koneksi SMTP gagal dan tampilkan ke user
+            \Illuminate\Support\Facades\Log::error("Mail Error: " . $e->getMessage()); // Catat ke log
+            $this->addError('email', 'Gagal mengirim email. Server email sedang bermasalah. Silakan coba lagi nanti.');
         }
     }
 
     public function render()
     {
         return view('livewire.auth.forgot-password')
-            ->layout('layouts.app'); // Pastikan pakai layout auth
+            ->layout('layouts.app'); // Pastikan pakai layout app
     }
 }

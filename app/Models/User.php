@@ -11,8 +11,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class User extends Authenticatable
 {
-        use HasFactory, Notifiable;
-        use HasFactory, Notifiable, SoftDeletes;
 
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable, TwoFactorAuthenticatable;
@@ -22,6 +20,8 @@ class User extends Authenticatable
      *
      * @var list<string>
      */
+
+    use HasFactory, Notifiable, SoftDeletes, TwoFactorAuthenticatable;
     protected $fillable = [
         'name',
         'email',
