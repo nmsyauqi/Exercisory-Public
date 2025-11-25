@@ -62,7 +62,7 @@
 
             <div class="block mt-4">
                 <label for="remember_me" class="flex items-center">
-                    <input id="remember_me" type="checkbox" wire:model="remember, true" class="form-checkbox w-4 h-4 text-blue-700 bg-white border-gray-700" />
+                    <input id="remember_me" type="checkbox" wire:model="remember" class="form-checkbox w-4 h-4 text-blue-700 bg-white border-gray-700" />
                     <span class="ml-2 text-sm text-gray-900">{{ __('Ingat saya') }}</span>
                 </label>
             </div>
